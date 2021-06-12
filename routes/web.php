@@ -13,4 +13,4 @@ use App\Http\Controllers\LoginController;
 |
 */
 
-Route::get('/login/username={username}&password={password}', [LoginController::class,"checkLogin"]);
+Route::get('/',function(){return view('index');});

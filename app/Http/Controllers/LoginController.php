@@ -4,20 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\User;
 class LoginController extends Controller
 {
-    function checkLogin($username,$password)
+    function checkLogin()
     {
-    	$users = DB::select("select * from users where username='$username' and password='$password'");
-
-    	if(count($users) == 1)
-    	{
-
+    	$users = User::all();
+    	foreach ($users as $user) {
+    		echo $user->firstname.$user->lastname;
     	}
-    	else
-    	{
-    	}
-    	    		return view("index");
 
     }
 }
