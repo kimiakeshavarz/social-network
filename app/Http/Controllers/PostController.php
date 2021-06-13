@@ -17,11 +17,11 @@ class PostController extends Controller
     }
 
     function getAllPosts(){
-    	return Post::get()->toJson();
+    	return Post::all()->toJson();
     }
 
     function getUserPosts($user_id){
-    	return Post::get()->where('user_id',$user_id)->toJson();
+    	return Post::where('user_id',$user_id)->get()->toJson();
     }
 
 }
