@@ -2,6 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 function Login() {
+    axios.get('/api/login').then(
+        function(response){
+            alert(response);
+    });
     return (
         <div className="container">
             <div className="row d-flex justify-content-center">
