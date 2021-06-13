@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\FollowerController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\LikeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,8 +31,13 @@ Route::group(['middleware'=>'checklogin'],function(){
 	Route::group(['middleware'=>'checkuser'],function(){
 		
 		Route::post('addPost',[PostController::class,"addPost"]);
+		
 		Route::post('follow',[FollowerController::class,"follow"]);
 		Route::post('unfollow',[FollowerController::class,"unfollow"]);
+		
+		Route::post('like',[LikeController::class,"like"]);
+		Route::post('unlike',[LikeController::class,"unlike"]);
+
 
 	});
 
@@ -39,7 +46,12 @@ Route::group(['middleware'=>'checklogin'],function(){
 	Route::get('getposts',[PostController::class,"getAllPosts"]);
 
 	Route::get('getfollowers',[FollowerController::class,"getfollowers"]);
-
 	Route::get('getfollowings',[FollowerController::class,"getfollowings"]);
+
+	Route::get('getusers',[UserController::class,"getUsers"]);
+	Route::get('getuserinfo/{user_id}',[UserController::class,"getUserInfo"]);
+	Route::get('getuserinfo/{user_id}',[UserController::class,"getUserInfo"]);
+
+	Route::get('searchuser/{search}',[UserController::class,"searchUser"]);
 
 });
