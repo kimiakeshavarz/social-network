@@ -13,6 +13,11 @@ use App\Http\Controllers\LoginController;
 |
 */
 
-Route::get('/',function(){return view('index');});
-Route::get('/login', [LoginController::class,"checkLogin"]);
-Route::get('/dashboard',function(){return view('index');})->name('dashboard')->middleware('checklogin');
+Route::group(['middleware'=>'checklogin'],function(){
+	Route::get('/dashboard',function(){return view('index');})->name('dashboard');
+
+});
+
+Route::get('/{path?}',function(){return view('index');});
+
+

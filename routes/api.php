@@ -21,5 +21,15 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 Route::post('login', [AuthController::class,"checkLogin"]);
 Route::post('register', [AuthController::class,"checkRegister"]);
-Route::get('getPosts', [PostController::class,"getAllPosts"])->middleware('checklogin');
+Route::group(['middleware'=>'checklogin'],function(){
+	
+	Route::group(['middleware'=>'checkuser'],function(){
+		Route::post('addPost',[PostController::class,"addPost"]);
+	});
 
+	Route::get('getuserposts/{user_id}',[PostController::class,"getUserPosts"]);
+	
+	Route::get('getposts',[PostController::class,"getAllPosts"]);
+
+
+});
