@@ -5,15 +5,17 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
+
 class AuthController extends Controller
 {
-    function checkLogin($username,$password)
-    {
+    function checkLogin(Request $request)
+    {   
+        $username = $request->username;
+        $password = $request->password;
     	$users = User::where('username',$username)->where('password',$password)->get();
     	if(count($users) == 1)
     	{
-            session(['user_id'=>$users[0]->id]);
-            return redirect('dashboard');
+            return 'true';
     	}
     	else
     	{
