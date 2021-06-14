@@ -7,23 +7,29 @@ class Login extends React.Component{
 
     constructor(props){
         super(props);
+        this.state = {Redirect:true};
     }
 
     onSubmit(){
         
-        const username = document.getElementById('username').innerHTML;
-        const password = document.getElementById('password').innerHTML;
+        var username = $('#username').val();
+        var password = $('#password').val();
 
         axios.post('/api/login',{username:username,password:password}).then(
             function(response){
-                if(response.toString() == "true")
+                
+                if(response.data.toString() == "true")
                 {
-                    return <Redirect to='/dashboard' />
+                    alert(this.state.Redirect);
+                    this.setState({Redirect:true});
                 }
         });   
     }
 
     render() {
+
+        return (<Redirect to='/' />);  
+    
         return (
             <div className="container">
                 <div className="row d-flex justify-content-center">
@@ -39,7 +45,7 @@ class Login extends React.Component{
                             <input id='password' type='password' class='form-control' />
                             </div>
                             <div className='card-foother justify-content-center'>
-                                <button className='btn btn-primary' onclick={this.onSubmit}>Login</button>
+                                <button className='btn btn-primary' onClick={this.onSubmit}>Login</button>
                             </div>
                             </div>
                         </div>
