@@ -16,8 +16,13 @@ class PostController extends Controller
     	return redirect('dashboard');
     }
 
-    function getAllPosts(){
-    	return Post::all()->toJson();
+    function getAllPosts($user_id){
+        $followings = Follower::where('Follower',$user_id);
+        $ids = array();
+        foreach ($followings as $following) {
+            array_push($ids,$following->followed);
+        }
+    	return Post::whereIn('user_id',$ids)->toJson();
     }
 
     function getUserPosts($user_id){
