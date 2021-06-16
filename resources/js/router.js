@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import Dashboard from './components/dashboard.js';
+import Dashboard from './components/dashboard.jsx';
 import Login from './components/login.jsx';
-import Example from './components/Example';
 import Register from './components/register.jsx';
+import 
 function App(){
 	return(
 		<div>
@@ -12,7 +12,7 @@ function App(){
 			<Switch>
 			<Route path='/login' component={Login} />
 			<Route path='/register' component={Register} />
-			<Route path='/' component={Example} />
+			<Route path='/' component={Dashboard} />
 			</Switch>
 		</BrowserRouter>
 		</div>

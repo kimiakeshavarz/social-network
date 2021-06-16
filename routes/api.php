@@ -30,7 +30,7 @@ Route::group(['middleware'=>'checklogin'],function(){
 	
 	Route::group(['middleware'=>'checkuser'],function(){
 		
-		Route::post('addPost',[PostController::class,"addPost"]);
+		Route::post('addpost',[PostController::class,"addPost"]);
 		
 		Route::post('follow',[FollowerController::class,"follow"]);
 		Route::post('unfollow',[FollowerController::class,"unfollow"]);

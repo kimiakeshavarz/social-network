@@ -7,13 +7,16 @@ use App\Models\Post;
 
 class PostController extends Controller
 {
-    function addPost($image,$caption,$user_id){
+    function addPost(Request $request){
     	$new_post = new Post;
-    	$new_post->image = $image;
-    	$new_post->caption = $caption;
-    	$new_post->user_id = $user_id;
+    	$new_post->image = $request->image;
+    	$new_post->caption = $request->caption;
+    	$new_post->user_id = $request->session()->get('user_id');
 
-    	return redirect('dashboard');
+        if(!$new_post->save())
+            return 'false';
+        return $new_post->toJson();
+    	
     }
 
     function getAllPosts($user_id){

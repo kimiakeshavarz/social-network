@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Dashboard from './dashboard.js';
+import Dashboard from './dashboard.jsx';
 import { Redirect } from "react-router-dom";
 import Router from '../router.js';
 class Login extends React.Component{

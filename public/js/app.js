@@ -2005,62 +2005,13 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 /***/ }),
 
-/***/ "./resources/js/components/Example.js":
-/*!********************************************!*\
-  !*** ./resources/js/components/Example.js ***!
-  \********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
-
-
-
-
-
-function Example() {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-    className: "container",
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-      className: "row justify-content-center",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-        className: "col-md-8",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-          className: "card",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-            className: "card-header",
-            children: "Example Component"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-            className: "card-body",
-            children: "I'm an example component!"
-          })]
-        })
-      })
-    })
-  });
-}
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Example);
-
-if (document.getElementById('example')) {
-  react_dom__WEBPACK_IMPORTED_MODULE_1__.render( /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(Example, {}), document.getElementById('example'));
-}
-
-/***/ }),
-
-/***/ "./resources/js/components/dashboard.js":
-/*!**********************************************!*\
-  !*** ./resources/js/components/dashboard.js ***!
-  \**********************************************/
+/***/ "./resources/js/components/dashboard.jsx":
+/*!***********************************************!*\
+  !*** ./resources/js/components/dashboard.jsx ***!
+  \***********************************************/
 /***/ (() => {
 
-throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index.js):\nSyntaxError: /home/amirreza/social-network/simple-social-network/resources/js/components/dashboard.js: Unexpected token (9:9)\n\n\u001b[0m \u001b[90m  7 |\u001b[39m \t}\u001b[0m\n\u001b[0m \u001b[90m  8 |\u001b[39m \trender(){\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m  9 |\u001b[39m \t\t\u001b[36mreturn\u001b[39m()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \t\t       \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 10 |\u001b[39m \t}\u001b[0m\n\u001b[0m \u001b[90m 11 |\u001b[39m }\u001b[0m\n\u001b[0m \u001b[90m 12 |\u001b[39m\u001b[0m\n    at Object._raise (/home/amirreza/social-network/simple-social-network/node_modules/@babel/parser/lib/index.js:816:17)\n    at Object.raiseWithData (/home/amirreza/social-network/simple-social-network/node_modules/@babel/parser/lib/index.js:809:17)\n    at Object.raise (/home/amirreza/social-network/simple-social-network/node_modules/@babel/parser/lib/index.js:770:17)\n    at Object.unexpected (/home/amirreza/social-network/simple-social-network/node_modules/@babel/parser/lib/index.js:9896:16)\n    at Object.parseParenAndDistinguishExpression (/home/amirreza/social-network/simple-social-network/node_modules/@babel/parser/lib/index.js:11541:12)\n    at Object.parseExprAtom (/home/amirreza/social-network/simple-social-network/node_modules/@babel/parser/lib/index.js:11191:23)\n    at Object.parseExprAtom (/home/amirreza/social-network/simple-social-network/node_modules/@babel/parser/lib/index.js:5245:20)\n    at Object.parseExprSubscripts (/home/amirreza/social-network/simple-social-network/node_modules/@babel/parser/lib/index.js:10869:23)\n    at Object.parseUpdate (/home/amirreza/social-network/simple-social-network/node_modules/@babel/parser/lib/index.js:10849:21)\n    at Object.parseMaybeUnary (/home/amirreza/social-network/simple-social-network/node_modules/@babel/parser/lib/index.js:10827:23)");
+throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index.js):\nSyntaxError: /home/amirreza/social-network/simple-social-network/resources/js/components/dashboard.jsx: Unexpected token (26:9)\n\n\u001b[0m \u001b[90m 24 |\u001b[39m \t\t})\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 25 |\u001b[39m \t\t\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 26 |\u001b[39m \t\t\u001b[36mreturn\u001b[39m()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \t\t       \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 27 |\u001b[39m \t}\u001b[0m\n\u001b[0m \u001b[90m 28 |\u001b[39m }\u001b[0m\n\u001b[0m \u001b[90m 29 |\u001b[39m\u001b[0m\n    at Object._raise (/home/amirreza/social-network/simple-social-network/node_modules/@babel/parser/lib/index.js:816:17)\n    at Object.raiseWithData (/home/amirreza/social-network/simple-social-network/node_modules/@babel/parser/lib/index.js:809:17)\n    at Object.raise (/home/amirreza/social-network/simple-social-network/node_modules/@babel/parser/lib/index.js:770:17)\n    at Object.unexpected (/home/amirreza/social-network/simple-social-network/node_modules/@babel/parser/lib/index.js:9896:16)\n    at Object.parseParenAndDistinguishExpression (/home/amirreza/social-network/simple-social-network/node_modules/@babel/parser/lib/index.js:11541:12)\n    at Object.parseExprAtom (/home/amirreza/social-network/simple-social-network/node_modules/@babel/parser/lib/index.js:11191:23)\n    at Object.parseExprAtom (/home/amirreza/social-network/simple-social-network/node_modules/@babel/parser/lib/index.js:5245:20)\n    at Object.parseExprSubscripts (/home/amirreza/social-network/simple-social-network/node_modules/@babel/parser/lib/index.js:10869:23)\n    at Object.parseUpdate (/home/amirreza/social-network/simple-social-network/node_modules/@babel/parser/lib/index.js:10849:21)\n    at Object.parseMaybeUnary (/home/amirreza/social-network/simple-social-network/node_modules/@babel/parser/lib/index.js:10827:23)");
 
 /***/ }),
 
@@ -2077,7 +2028,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
-/* harmony import */ var _dashboard_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./dashboard.js */ "./resources/js/components/dashboard.js");
+Object(function webpackMissingModule() { var e = new Error("Cannot find module './dashboard.js'"); e.code = 'MODULE_NOT_FOUND'; throw e; }());
 /* harmony import */ var _router_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../router.js */ "./resources/js/router.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -2212,7 +2163,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
-/* harmony import */ var _dashboard_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./dashboard.js */ "./resources/js/components/dashboard.js");
+Object(function webpackMissingModule() { var e = new Error("Cannot find module './dashboard.js'"); e.code = 'MODULE_NOT_FOUND'; throw e; }());
 /* harmony import */ var _router_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../router.js */ "./resources/js/router.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -2396,14 +2347,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/esm/react-router.js");
-/* harmony import */ var _components_dashboard_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/dashboard.js */ "./resources/js/components/dashboard.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/esm/react-router.js");
+/* harmony import */ var _components_dashboard_jsx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/dashboard.jsx */ "./resources/js/components/dashboard.jsx");
+/* harmony import */ var _components_dashboard_jsx__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_components_dashboard_jsx__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _components_login_jsx__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/login.jsx */ "./resources/js/components/login.jsx");
-/* harmony import */ var _components_Example__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/Example */ "./resources/js/components/Example.js");
-/* harmony import */ var _components_register_jsx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/register.jsx */ "./resources/js/components/register.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
-
+/* harmony import */ var _components_register_jsx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/register.jsx */ "./resources/js/components/register.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 
 
 
@@ -2414,18 +2364,18 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function App() {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_7__.BrowserRouter, {
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(react_router_dom__WEBPACK_IMPORTED_MODULE_8__.Switch, {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_8__.Route, {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_6__.BrowserRouter, {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(react_router_dom__WEBPACK_IMPORTED_MODULE_7__.Switch, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_7__.Route, {
           path: "/login",
           component: _components_login_jsx__WEBPACK_IMPORTED_MODULE_3__.default
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_8__.Route, {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_7__.Route, {
           path: "/register",
-          component: _components_register_jsx__WEBPACK_IMPORTED_MODULE_5__.default
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_8__.Route, {
+          component: _components_register_jsx__WEBPACK_IMPORTED_MODULE_4__.default
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_7__.Route, {
           path: "/",
-          component: _components_Example__WEBPACK_IMPORTED_MODULE_4__.default
+          component: (_components_dashboard_jsx__WEBPACK_IMPORTED_MODULE_2___default())
         })]
       })
     })
@@ -2433,7 +2383,7 @@ function App() {
 }
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (App);
-react_dom__WEBPACK_IMPORTED_MODULE_1__.render( /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(App, {}), document.getElementById('index'));
+react_dom__WEBPACK_IMPORTED_MODULE_1__.render( /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(App, {}), document.getElementById('index'));
 
 /***/ }),
 
