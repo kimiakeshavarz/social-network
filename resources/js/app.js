@@ -12,5 +12,5 @@ require('./bootstrap');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-require('./Router.js');
+require('./router.js');
 

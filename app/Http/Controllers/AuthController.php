@@ -15,6 +15,7 @@ class AuthController extends Controller
     	$users = User::where('username',$username)->where('password',$password)->get();
     	if(count($users) == 1)
     	{
+            session(['user_id'=>$new_user->id]);
             return 'true';
     	}
     	else
@@ -38,8 +39,8 @@ class AuthController extends Controller
     		$new_user->password = $password;
     		$new_user->profile = $profile;
     		$new_user->save();
-            session(['username'=>$new_user->id]);
-    		return redirect('dashboard');
+            session(['user_id'=>$new_user->id]);
+    		return 'true';
     	}
     	else
     	{

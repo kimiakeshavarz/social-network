@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Dashboard from './Dashboard';
+import Dashboard from './dashboard.js';
 import { Redirect } from "react-router-dom";
-
+import Router from '../router.js';
 class Login extends React.Component{
 
     constructor(props){
@@ -15,9 +15,9 @@ class Login extends React.Component{
         var username = $('#username').val();
         var password = $('#password').val();
 
-        axios.post('/api/login',{username:username,password:password}).then(
+        axios.post('/login',{username:username,password:password}).then(
             function(response){
-                
+                alert('dasda');
                 if(response.data.toString() == "true")
                 {
                     alert(this.state.Redirect);
@@ -28,7 +28,6 @@ class Login extends React.Component{
 
     render() {
 
-        return (<Redirect to='/' />);  
     
         return (
             <div className="container">
