@@ -15,6 +15,10 @@ use App\Http\Controllers\LoginController;
 
 Route::group(['middleware'=>'checklogin'],function(){
 	Route::get('/dashboard',function(){return view('index');})->name('dashboard');
+	Route::get('/addpost',function(){return view('index');})->name('addpost');
+	Route::get('/profile',function(){return view('index');})->name('profile');
+	Route::get('/',function(){return view('index');})->name('main');
+
 
 });
 

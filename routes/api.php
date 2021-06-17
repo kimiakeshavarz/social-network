@@ -41,7 +41,7 @@ Route::group(['middleware'=>'checklogin'],function(){
 
 	});
 
-	Route::get('getuserposts/{user_id}',[PostController::class,"getUserPosts"]);
+	Route::get('getposts/{user_id}',[PostController::class,"getUserPosts"]);
 	
 	Route::get('getposts',[PostController::class,"getAllPosts"]);
 

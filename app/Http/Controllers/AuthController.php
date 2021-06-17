@@ -15,7 +15,7 @@ class AuthController extends Controller
     	$users = User::where('username',$username)->where('password',$password)->get();
     	if(count($users) == 1)
     	{
-            session(['user_id'=>$new_user->id]);
+            Session::put('user_id',$users[0]->id);
             return 'true';
     	}
     	else
@@ -24,10 +24,15 @@ class AuthController extends Controller
     	}
     }
 
-    function checkRegister($firstname,$lastname,$email,$username,$password,$profile)
+    function checkRegister(Request $request)
     {
-
-    	$users = User::where('username',$username)->orwhere('email',$email);
+        $firstname = $request->firstname;
+        $lastname = $request->lastname;
+        $username = $request->username;
+        $password = $request->password;
+        $profile = $request->profile;
+        $email = $request->email;
+    	$users = User::where('username',$username)->orwhere('email',$email)->get();
 
     	if(count($users) == 0)
     	{
@@ -39,7 +44,7 @@ class AuthController extends Controller
     		$new_user->password = $password;
     		$new_user->profile = $profile;
     		$new_user->save();
-            session(['user_id'=>$new_user->id]);
+            $request->session()->put('user_id',$users[0]->id);
     		return 'true';
     	}
     	else

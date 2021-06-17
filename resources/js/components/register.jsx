@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Dashboard from './dashboard.js';
+import Dashboard from './dashboard.jsx';
 import { Redirect } from "react-router-dom";
 import Router from '../router.js';
 class Register extends React.Component{
 
     constructor(props){
         super(props);
-        this.state = {Redirect:true};
+        this.state = {Redirect:false};
     }
 
     validatePassword(){
@@ -27,10 +27,10 @@ class Register extends React.Component{
         var lastname = $('#lastname').val();
         var username = $('#username').val();
         var password = $('#password').val();
-        var email = $('#email').val();
-        var profile = $('#profile').val();
+        var email = $('#e-mail').val();
+        var profile = $('#picture').val();
 
-        axios.post('/api/login',{firstname:firstname,lastname:lastname,email:email,username:username,password:password,profile:profile}).then(
+        axios.post('/api/register',{firstname:firstname,lastname:lastname,email:email,username:username,password:password,profile:profile}).then(
             function(response){
                 alert(response.date);
                 if(response.data.toString() == "true")

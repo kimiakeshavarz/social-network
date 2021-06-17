@@ -32,4 +32,14 @@ class PostController extends Controller
     	return Post::where('user_id',$user_id)->get()->toJson();
     }
 
+    function removePost(Request $request)
+    {
+        $user_id = $request->session()->user_id;
+        $post_id = $request->post_id;
+
+        $result = Post::where('user_id',$user_id)->where('post_id',$post_id)->delete();
+        
+        return $result;
+    }
+
 }

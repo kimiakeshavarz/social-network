@@ -12,6 +12,6 @@ class User extends Model
 {
     use HasFactory, Notifiable;
 
+    public $timestamps = false;
     protected $table = 'users';
-
 }

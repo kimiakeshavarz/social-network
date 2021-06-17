@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Posts from './getposts.jsx';
 class Dashboard extends React.Component{
 
 	constructor(props){
@@ -18,12 +19,7 @@ class Dashboard extends React.Component{
 
 	}
 	render(){
-		var posts = '';
-		axios.get('/api/getposts/').then(function(response){
-			posts = response.data.json;
-		});
-		
-		return();
+		return(<h1>salamu</h1>);
 	}
 }
 
