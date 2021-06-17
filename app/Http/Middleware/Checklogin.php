@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-
+use Session;
 class Checklogin
 {
     /**
@@ -16,9 +16,9 @@ class Checklogin
      */
     public function handle(Request $request, Closure $next)
     {
-        if(!$request->session()->has('user_id'))
+        if($request->session()->missing('user_id'))
         {
-            return redirect('/login');
+
         }
         return $next($request);
     }

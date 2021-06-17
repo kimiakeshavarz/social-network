@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
-
+use Session; 
 class AuthController extends Controller
 {
     function checkLogin(Request $request)
@@ -15,7 +15,8 @@ class AuthController extends Controller
     	$users = User::where('username',$username)->where('password',$password)->get();
     	if(count($users) == 1)
     	{
-            Session::put('user_id',$users[0]->id);
+
+            $request->session()->put('user_id',$users[0]->id);
             return 'true';
     	}
     	else

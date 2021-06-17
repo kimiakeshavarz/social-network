@@ -18,7 +18,7 @@ class Checkuser
     {
         if($request->session('user_id') != $request->route('user_id'))
         {
-            return 'false';
+
         } 
         return $next($request);
     }

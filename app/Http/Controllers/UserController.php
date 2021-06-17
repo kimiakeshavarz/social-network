@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Models\User;
 class UserController extends Controller
 {
 	function startsWith ($string, $startString)
@@ -12,15 +12,17 @@ class UserController extends Controller
     	return (substr($string, 0, $len) === $startString);
 	}
 
-    function getUserInfo($user_id){
-    	return User::where('id',$user_id)::first()->toJson();
+    function getUserInfo(Request $request){
+        $user_id = $request->user_id;
+    	return User::where('id',$user_id)->get()->toJson();
     }
 
     function getUsers(){
     	return User::all()->toJson();
     }
 
-    function searchUser($str){
+    function searchUser(Request $request){
+        $str = $request->str;
     	$users = User::all();
     	$matched_users = array();
     	foreach ($users as $user) {

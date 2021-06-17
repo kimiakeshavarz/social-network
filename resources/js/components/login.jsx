@@ -3,6 +3,9 @@ import ReactDOM from 'react-dom';
 import Dashboard from './dashboard.jsx';
 import { Redirect } from "react-router-dom";
 import Router from '../router.js';
+import 
+{ Container,Button,Card,InputGroup,Form,FormControl,Alert } 
+from 'react-bootstrap';
 class Login extends React.Component{
 
     constructor(props){
@@ -21,33 +24,38 @@ class Login extends React.Component{
                 {
                     this.setState({Redirect:true});
                 }
+                else
+                {
+                    ReactDOM.render(<Alert variant='danger'>Username or password is incorrect.</Alert>,document.getElementById('alert'));
+                }
         });   
     }
 
     render() {
 
         return (
-            <div className="container">
-                <div className="row d-flex justify-content-center">
-                    <div className="m-3 col-md-6">
-                        <div className="card">
-                            <div className="card-header">login</div>
-
-                            <div className="card-body">
-                            <div className='form-group m-4'>
-                            <input id='username' class='form-control' />
+            <Container fluid className="pb-5 w-100 h-100 bg-secondary ">
+            <div className='row pt-5 d-flex justify-content-center w-100 h-100'>
+                                        <div id='alert'></div>
+                        <Card className='mt-4 pb-5 bg-light col-md-4 h-75 '>
+                            <Card.Body className='mt-4'>
+                            <Card.Title><h5>please fill the inputs.</h5></Card.Title>
+                            <Form.Group className='mt-5'>
+                            <FormControl id='username' class='form-control' placeholder='Username or email'/>
+                            </Form.Group>
+                            <Form.Group className='mt-4'>
+                            <FormControl id='password' type='password' class='form-control' placeholder='Password'/>
+                            </Form.Group>
+                            <Form.Group className='mt-5 d-flex justify-content-center'>
+                                <Button className='btn btn-primary btn-lg' onClick={this.onSubmit}>Login</Button>
+                            </Form.Group>
+                            <div className='mt-4'>
+                            <Card.Link href='/register'>Not have account?</Card.Link>
                             </div>
-                            <div className='form-group m-4'>
-                            <input id='password' type='password' class='form-control' />
-                            </div>
-                            <div className='card-foother justify-content-center'>
-                                <button className='btn btn-primary' onClick={this.onSubmit}>Login</button>
-                            </div>
-                            </div>
+                            </Card.Body>
+                        </Card>
                         </div>
-                    </div>
-                </div>
-            </div>
+            </Container>
         );
     }
 }

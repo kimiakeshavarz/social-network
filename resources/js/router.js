@@ -15,6 +15,7 @@ function App(){
 			<Route path='/register' component={Register} />
 			<Route path='/profile' component={profile} />
 			<Route path='/dashboard' component={Dashboard} />
+			<Route path='/addpost' component={Addpost} />
 			<Route path='/' component={Dashboard} />
 			</Switch>
 		</BrowserRouter>
