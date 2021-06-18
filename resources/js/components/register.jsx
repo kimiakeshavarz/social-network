@@ -3,6 +3,10 @@ import ReactDOM from 'react-dom';
 import Dashboard from './dashboard.jsx';
 import { Redirect } from "react-router-dom";
 import Router from '../router.js';
+import
+{ Container,Row,Col,Button,Card,InputGroup,Form,FormControl,Alert } 
+from 'react-bootstrap';
+
 class Register extends React.Component{
 
     constructor(props){
@@ -15,9 +19,10 @@ class Register extends React.Component{
         var password2 = $("#password2").val();
         if(password != password2)
         {
-
+            ReactDOM.render(<Alert>passwords not matched</Alert>,document.getElementById('alert'));
         }
         if(len(password) < 8){
+            ReactDOM.render(<Alert>password must be </Alert>,document.getElementById('alert'));
 
         }
     }
@@ -43,46 +48,58 @@ class Register extends React.Component{
 
     render() {    
         return (
-            <div className="container">
-                <div className="row d-flex justify-content-center">
-                    <div className="m-3 col-md-6">
-                        <div className="card">
-                            <div className="card-header">login</div>
+            <Container fluid className='bg-secondary w-100 h-100 p-5'>
+                <Row className="d-flex justify-content-center p-5 h-75">
+                <div id='alert'></div>
+                    <Col md='5'>
+                        <Card className='bg-light'>
+                            <Card.Body>
+                            <Card.Title><h5>please fill inputs.</h5></Card.Title>
+                            <Form.Group className='mt-5'>
+                            <Row>
+                            <Col md='6'>
+                            <Form.Control id='firstname' placeholder='Firstname' required/>
+                            </Col>
+                            <Col md='6'>
+                            <Form.Control id='lastname' placeholder='Lastname' required/>
+                            </Col>
+                            </Row>
+                            </Form.Group>
 
-                            <div className="card-body">
+                            <Form.Group className='mt-4'>
+                            <Form.Control id='username' placeholder='Username'required />
+                            </Form.Group>
 
-                            <div className='form-group m-4 row'>
-                            <input id='firstname' class='form-control col' />
-                            <input id='lastname' class='form-control col' />
-                            </div>
+                            <Form.Group className='mt-4'>
+                            <Form.Control id='e-mail' placeholder='Email address' requreid/>
+                            </Form.Group>
 
-                            <div className='form-group m-4'>
-                            <input id='username' class='form-control' />
-                            </div>
+                            <Form.Group className='mt-4 '  >
+                            <Row className='d-flex justify-content-center'>
+                            <Col sm='5'>
+                            <Form.Control id='password' type='password' placeholder='Password' required/>
+                            </Col>
+                            <Col sm='5'>
+                            <FormControl id='password2' type='password' placeholder='re-type password' required/>
+                            </Col>
+                            </Row>
+                            </Form.Group>
 
-                            <div className='form-group m-4'>
-                            <input id='e-mail' class='form-control' />
-                            </div>
-
-                            <div className='form-group m-4'>
-                            <input id='password' type='password' class='form-control' />
-                            <input id='password2' type='password' class='form-control' />
-                            </div>
-
-                            <div className='form-group m-4'>
-                            <input id='picture' class='form-control' />
-                            </div>
-                            <div className='card-foother justify-content-center'>
-                                <button className='btn btn-primary' onClick={this.onSubmit}>Sign    up</button>
-                            </div>
-                            <div className='card-link justify-content-center'>
+                            <Form.Group className='m-4 d-flex justify-content-end'>
+                            <Form.Label for='picture' className=' btn btn-sm btn-warning'>Select profile</Form.Label >
+                            <Form.Control type='file' id='picture' required hidden/>
+                            </Form.Group>
+                            <Form.Group className='d-flex justify-content-center'>
+                                <button className='btn btn-success btn-lg' onClick={this.onSubmit}>Sign    up</button>
+                            </Form.Group>
+                            <Card.Link className='mt-3 d-flex justify-content-center'>
                             <a href='/login'>already has an account?</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            </div>
+                            </Card.Link>
+                        </Card.Body>
+                    </Card>
+                </Col>
+            </Row>
+            </Container>
         );
     }
 }

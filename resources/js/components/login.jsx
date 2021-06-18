@@ -41,10 +41,10 @@ class Login extends React.Component{
                             <Card.Body className='mt-4'>
                             <Card.Title><h5>please fill the inputs.</h5></Card.Title>
                             <Form.Group className='mt-5'>
-                            <FormControl id='username' class='form-control' placeholder='Username or email'/>
+                            <Form.Control id='username'  placeholder='Username or email' required/>
                             </Form.Group>
                             <Form.Group className='mt-4'>
-                            <FormControl id='password' type='password' class='form-control' placeholder='Password'/>
+                            <Form.Control id='password' type='password' placeholder='Password' required/>
                             </Form.Group>
                             <Form.Group className='mt-5 d-flex justify-content-center'>
                                 <Button className='btn btn-primary btn-lg' onClick={this.onSubmit}>Login</Button>

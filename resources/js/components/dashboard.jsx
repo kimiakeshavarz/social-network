@@ -19,11 +19,8 @@ class Dashboard extends React.Component{
 
 	}
 	render(){
-		axios.get('/api/getposts').then(
-            function(response){
-            alert(response.data)
-        }); 
-		return(<h1>salamu</h1>);
+
+		return(<Posts user_id=''/>);
 	}
 }
 
