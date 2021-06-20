@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Posts from './getposts.jsx';
 class Profile extends React.Component{
 
 	constructor(props){

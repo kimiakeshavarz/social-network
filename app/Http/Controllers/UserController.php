@@ -14,7 +14,7 @@ class UserController extends Controller
 
     function getUserInfo(Request $request){
         $user_id = $request->user_id;
-    	return User::where('id',$user_id)->get()->toJson();
+    	return User::where('id',$user_id)->get()[0]->toJson();
     }
 
     function getUsers(){

@@ -26,7 +26,7 @@ class PostController extends Controller
         foreach ($followings as $following) {
             array_push($ids,$following->followed);
         }
-    	return Post::whereIn('user_id',$ids)->get()->toJson();
+    	return Post::all()->toJson();
     }
 
     function getUserPosts(Request $request){
