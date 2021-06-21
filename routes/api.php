@@ -33,14 +33,16 @@ Route::group(['middleware'=>'web'],function(){
 		Route::group(['middleware'=>'checkuser'],function(){
 			
 			Route::post('addpost',[PostController::class,"addPost"]);
-			
-			Route::post('follow',[FollowerController::class,"follow"]);
-			Route::post('unfollow',[FollowerController::class,"unfollow"]);
+			Route::post('removepost',[PostController::class,"removePost"]);
+
+			Route::post('follow',[FollowController::class,"follow"]);
+			Route::post('unfollow',[FollowController::class,"unfollow"]);
 			
 			Route::post('like',[LikeController::class,"like"]);
 			Route::post('unlike',[LikeController::class,"unlike"]);
-			Route::get('getrequests/{user_id}',[FollowerController::class,"getRequests"]);
-			Route::post('requestfollow',[FollowerController::class,"requestFollow"]);
+			Route::get('getrequests/{user_id}',[FollowController::class,"getRequests"]);
+			Route::post('acceptfollow',[FollowController::class,"acceptFollow"]);
+
 
 
 		});
@@ -56,7 +58,7 @@ Route::group(['middleware'=>'web'],function(){
 		Route::get('getuserinfo/{user_id}',[UserController::class,"getUserInfo"]);
 		Route::get('getuserinfo/{user_id}',[UserController::class,"getUserInfo"]);
 
-		Route::get('searchuser/{search}',[UserController::class,"searchUser"]);
+		Route::get('searchuser/{text?}',[UserController::class,"searchUser"]);
 
 	});
 });

@@ -1,13 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import Dashboard from './components/dashboard.jsx';
 import Login from './components/login.jsx';
 import Register from './components/register.jsx';
-import Addpost from './components/addpost.jsx';
+import Addpost from './components/myposts.jsx';
 import Profile from './components/profile.jsx';
-
-export const Context = React.createContext()
 
 function App(){
 	return(
@@ -16,8 +13,12 @@ function App(){
 			<Switch>
 			<Route path='/login' component={Login} />
 			<Route path='/register' component={Register} />
-			<Route path='/profile' component={Profile} />
-			<Route path='/dashboard' component={Dashboard} />
+			<Route path='/profile'>
+				<Profile dashboard={false}/>
+			</Route>
+			<Route path='/dashboard'>
+				<Profile dashboard={true}/>
+			</Route>
 			<Route path='/addpost' component={Addpost} />
 			<Route path='/' component={Login} />
 			</Switch>

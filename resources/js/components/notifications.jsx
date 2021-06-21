@@ -16,7 +16,7 @@ getUserInfo(user_id){
 	
 	for(let i=0;i<this.state.requests.length;i++)
 	{
-		if(this.state.requests[i].user_id == user_id)
+		if(this.state.requests[i].id == user_id)
 			return this.state.requests[i];
 	}
 }
@@ -32,7 +32,15 @@ getRequests(user_id){
 
 follow(follower_id,followed_id){
 	
-	axios.post("/api/follow/",{follower_id:follower_id,followed_id:followed_id}).then(
+	axios.post("/api/acceptfollow/",{follower_id:follower_id,followed_id:followed_id}).then(
+	function(response){
+		return response.data; 
+	});
+}
+
+unfollow(follower_id,followed_id){
+	
+	axios.post("/api/unfollow/",{follower_id:follower_id,followed_id:followed_id}).then(
 	function(response){
 		return response.data; 
 	});
@@ -44,9 +52,14 @@ render()
 
 	return (self.state.requests.map(function(request){
 		var user = self.getUserInfo(self.state.user_id); 
-		return(<Card>
+		return(<Card className='bg-light'>
 		<Card.Body>
-		<h3>ss</h3>
+		<Row>
+		<Col>{user.firstname} {user.lastname} has requested to follow you.</Col>
+		<Col md='2'><Button className='primary' onClick={()=>self.follow(user.id,self.state.user_id)} roundedCircle>Accept</Button></Col>
+		<Col md='2'><Button className='primary' onClick={()=>self.unfollow(user.id,self.state.user_id)} roundedCircle>Reject</Button></Col>
+
+		</Row>
 		</Card.Body>
 		</Card>);
 	}));

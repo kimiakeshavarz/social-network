@@ -22,17 +22,21 @@ class UserController extends Controller
     }
 
     function searchUser(Request $request){
-        $str = $request->str;
+        $text = $request->text;
     	$users = User::all();
     	$matched_users = array();
     	foreach ($users as $user) {
-    		
-    		if(startsWith($user->username,$str) || startsWith($user->username,$str) || startsWith($user->username,$str)){
 
-    			array_push($matched_users,$user);
-    		}
+    	   if($text == Null || $this->startsWith($user->firstname,$text) || $this->startsWith($user->lastname,$text) || $this->startsWith($user->username,$text) ){
+
+                $item = array();
+                $item['label'] = $user->firstname . ' '. $user->lastname.' @'.$user->username;
+                $item['value'] = $user->firstname . $user->lastname;
+			    array_push($matched_users,$item);
+            }
+
     	}
 
-    	return $matched_users->toJson();
+    	return json_encode($matched_users);
     }
 }
