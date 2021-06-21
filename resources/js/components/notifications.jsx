@@ -8,6 +8,8 @@ constructor(props)
 {
 	super(props);
 	this.state = {requests:[],lastuser:0,user_id:1};
+	this.getRequests(this.state.user_id);
+
 }
 
 getUserInfo(user_id){
@@ -38,10 +40,6 @@ follow(follower_id,followed_id){
 
 render()
 {
-	const user_id = this.state.user_id;
-
-	this.getRequests(user_id);
-
 	var self = this;
 
 	return (self.state.requests.map(function(request){

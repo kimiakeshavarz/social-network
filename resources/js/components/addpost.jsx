@@ -44,4 +44,3 @@ class Addpost extends React.Component{
 }
 
 export default Addpost;
-ReactDOM.render(<Addpost/>,document.getElementById('index'));

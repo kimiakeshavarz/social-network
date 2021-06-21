@@ -39,6 +39,8 @@ Route::group(['middleware'=>'web'],function(){
 			
 			Route::post('like',[LikeController::class,"like"]);
 			Route::post('unlike',[LikeController::class,"unlike"]);
+			Route::get('getrequests/{user_id}',[FollowerController::class,"getRequests"]);
+			Route::post('requestfollow',[FollowerController::class,"requestFollow"]);
 
 
 		});

@@ -59,4 +59,3 @@ class Login extends React.Component{
 }
 export default Login;
 
-ReactDOM.render(<Login />, document.getElementById('index'));

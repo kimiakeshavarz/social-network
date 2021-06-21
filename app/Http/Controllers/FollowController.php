@@ -16,6 +16,7 @@ class FollowController extends Controller
     	$follower = new Follower;
     	$follower->follower = $follower_id;
     	$follower->followed = $followed_id;
+        $follower->accepted = 1;
     	$follower->save();
     }
 
@@ -32,7 +33,7 @@ class FollowController extends Controller
         $user_id = $request->user_id;
         if($user_id == Null)
             $user_id = $request->session->get('user_id');
-        $followers = Follower::where('follower',$user_id)->get();
+        $followers = Follower::where('follower',$user_id)->where('accepted',1)->get();
         $follower_infos = array();
         foreach ($followers as $follower) {
             $info = User::where('id',$user_id)->get()[0];
@@ -46,13 +47,31 @@ class FollowController extends Controller
         $user_id = $request->user_id;
         if($user_id == Null)
             $user_id = $request->session->get('user_id');
-        $followers = Follower::where('followed',$user_id)->get();
+        $followers = Follower::where('followed',$user_id)->where('accepted',1)->get();
         $follower_infos = array();
         foreach ($followers as $follower) {
             $info = User::where('id',$user_id)->get()[0];
             array_push($follower_infos,$info);
         }
         return json_encode($follower_infos);
+    }
+
+    function getRequests(Request $request)
+    {
+        $user_id = $request->user_id;
+
+        if($user_id == Null)
+            $user_id = $request->session->get('user_id');
+
+        return Follower::where('followed',$user_id)->where('accepted',0)->get()->toJson();
+    }
+
+    function requestFollow(Request $request)
+    {
+        $followed_id = $request->followed_id;
+        $follower_id = $request->follower_id;
+
+        Follower::where("followed",$followed_id)->where("follower",$follower_id)->update(['accepted' => 1]);
     }
 }
 

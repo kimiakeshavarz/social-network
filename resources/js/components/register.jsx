@@ -1,8 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Dashboard from './dashboard.jsx';
 import { Redirect } from "react-router-dom";
-import Router from '../router.js';
 import
 { Container,Row,Col,Button,Card,InputGroup,Form,FormControl,Alert } 
 from 'react-bootstrap';
@@ -104,5 +102,3 @@ class Register extends React.Component{
     }
 }
 export default Register;
-
-ReactDOM.render(<Register/>, document.getElementById('index'));

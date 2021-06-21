@@ -1,11 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Container,Card,Image,Row,Col,Nav,Form} from 'react-bootstrap';
+import Notifs from './notifications.jsx';
 class Dashboard extends React.Component{
 
 	constructor(props){
         super(props);
         this.state = {posts:[1],followings:[],user_id:1,followers:[]};
+
+        this.getPosts();
+        this.getFollowings();
+        this.getFollowers();
     }
 	onSearchChanged(){
 		var search = $("#search").val();
@@ -19,6 +24,30 @@ class Dashboard extends React.Component{
         }); 
 
 	}
+
+    getPosts(){
+
+        var self = this;
+        axios.get("/api/getposts/").then(function(response){
+                self.setState({posts:response.data});
+            });
+    }
+
+    getFollowings(){
+
+        var self = this;
+        axios.get("/api/getfollowings/"+this.state.user_id).then(function(response){
+                self.setState({followings:response.data});
+            });
+    }
+
+    getFollowers(){
+
+        var self = this;
+        axios.get("/api/getfollowers/"+this.state.user_id).then(function(response){
+                self.setState({followers:response.data});
+            });
+    }
     getUser(user_id){
         for(let i =0;i<this.state.followings.length;i++){
             if(this.state.followings[i].id = user_id)
@@ -34,17 +63,6 @@ class Dashboard extends React.Component{
         var self = this;
         var current_user = this.getUser(this.state.user_id);
         var user_profile = '/images/1.jpg';
-        
-        axios.get("/api/getposts/").then(function(response){
-                self.setState({posts:response.data});
-            });
-
-        axios.get("/api/getfollowings/"+this.state.user_id).then(function(response){
-                self.setState({followings:response.data});
-            });
-        axios.get("/api/getfollowers/"+this.state.user_id).then(function(response){
-                self.setState({followers:response.data});
-            });
 
 		return(<Container fluid className='bg-secondary h-100 w-100 p-3 '>
         <Row>
@@ -105,6 +123,7 @@ class Dashboard extends React.Component{
 
                 </Col>
                 </Row>
+                <Notifs />
             </Card.Body>
         </Card>
         </Col></Row></Container>);
@@ -112,4 +131,3 @@ class Dashboard extends React.Component{
 }
 
 export default Dashboard;
-ReactDOM.render(<Dashboard user_id='1'/>,document.getElementById('index'));
