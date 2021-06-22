@@ -1,23 +1,27 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Container,Card,Image,Row,Col,Nav,Form} from 'react-bootstrap';
+import {Container,Card,Image,Row,Col,Nav,Form,Button} from 'react-bootstrap';
 import Select from 'react-select';
 import MyPosts from './myposts.jsx';
 import Notifs from './notifications.jsx';
+import { withRouter } from 'react-router-dom';
 
 class Profile extends React.Component{
 
 	constructor(props){
         super(props);
-        this.state = {posts:[1],followings:[],user_id:1,followers:[],options:[],current_user:[],dashboard:props.dashboard};
+        this.state = {posts:[1],followings:[],followers:[],options:[],current_user:[],logged_user:[],user_id:1};
 
-        this.getPosts();
-        this.getFollowings();
-        this.getFollowers();
-        this.getAllUsers();
-        this.getCurrentUser();
     }
 
+    componentDidMount(){
+        this.getLoggedUser();
+        this.getCurrentUser();
+        this.getPosts();
+        this.getAllUsers();
+        this.getFollowings();
+        this.getFollowers();
+    }
 	getAllUsers(){
 	
 		var self = this;
@@ -26,8 +30,20 @@ class Profile extends React.Component{
             	self.setState({options:response.data});
             	
         }); 
-
 	}
+
+	isFollowed(){
+		
+		for(let i =0;i<this.state.followers.length;i++)
+		{
+			if(this.state.followers[i].follower == this.state.logged_user.id)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 
 	goUserProfile(){
 
@@ -43,26 +59,48 @@ class Profile extends React.Component{
     getFollowings(){
 
         var self = this;
-        axios.get("/api/getfollowings/"+this.state.user_id).then(function(response){
+        axios.get("/api/getfollowings/1").then(function(response){
                 self.setState({followings:response.data});
- 																																																																																											           });
+ 																																																																																											          ;
+    });
     }
 
     getFollowers(){
 
         var self = this;
-        axios.get("/api/getfollowers/"+this.state.user_id).then(function(response){
+        axios.get("/api/getfollowers/1").then(function(response){
                 self.setState({followers:response.data});
             });
     }
 
+    getLoggedUser(){
+
+    	var self = this;
+        axios.get("/api/getloggeduser/").then(function(response){
+                self.setState({logged_user:response.data});
+            });
+
+    }
     getCurrentUser(){
 
     	var self = this;
-    	var user_id = this.state.user_id;
-        axios.get("/api/getuserinfo/"+user_id).then(function(response){
+
+    	var url_parts = window.location.pathname.split('/');
+        if(url_parts[url_parts.length-2] != 'profile')
+        {
+        	var user_id = (url_parts[url_parts.length-1]);
+
+        	axios.get("/api/getuserinfo/"+this.state.user_id).then(function(response){
                 self.setState({current_user:response.data});
-            });
+            });		
+
+        }
+        else
+        {
+            this.setState({current_user:this.state.logged_user});
+
+        }
+
 
     }
 
@@ -75,6 +113,36 @@ class Profile extends React.Component{
         }
         return false;
     }
+
+   	follow(user_id){
+   		axios.post('/api/follow/',{followed_id:user_id,following_id:this.state.logged_user.id}).then(
+   		function(response){
+
+   		});
+	}
+
+	unfollow(user_id){
+
+		axios.post('/api/unfollow/',{followed_id:user_id,following_id:this.state.logged_user.id}).then(
+   		function(response){
+
+   		});
+	}
+
+	like(post_id){
+		axios.post('/api/like',{post_id:post_id,user_id:this.state.logged_user.id}).then(
+		function(response){
+			
+		});
+	}
+
+	unlike(post_id){
+		axios.post('/api/unlike',{post_id:post_id,user_id:this.state.logged_user.id}).then(
+		function(response){
+			
+		});
+	}
+
 	render(){
 
         var self = this;
@@ -83,13 +151,12 @@ class Profile extends React.Component{
 
 		return(<Container fluid className='bg-secondary h-100 w-100 p-3 '>
         <Row>
-        <MyPosts/>
         <Col>
         <Row className='w-100 d-flex justify-content-center'>
 			<Select onChange={this.goUserProfile()} options={this.state.options} id='search-select' value="sv"   placeholder="Search user..." />
         </Row>
         <Row className='w-100 h-100 '> 
-        {this.state.posts.map(
+        {this.state.current_user.id == this.state.logged_user.id ? <MyPosts/> :this.state.posts.map(
         function(post,index){
 
             var user = self.getFollowingUser(self.state.posts[index].user_id);
@@ -141,11 +208,14 @@ class Profile extends React.Component{
 
                 </Col>
                 </Row>
-                <Notifs />
+                {this.state.current_user.id == this.state.logged_user.id?<div></div>:
+                <Form.Group>
+                	{this.isFollowed()?<Button id='follow' onClick={this.follow()}>Follow</Button>:<Button id='unfollow' onClick={this.unfollow()}>UnFollow</Button>}
+                </Form.Group>}
             </Card.Body>
         </Card>
         </Col></Row></Container>);
 	}
 }
 
-export default Profile;
+export default withRouter(Profile);

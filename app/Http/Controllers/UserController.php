@@ -39,4 +39,11 @@ class UserController extends Controller
 
     	return json_encode($matched_users);
     }
+
+    function getLoggedUser(Request $request){
+        //$user = User::where('id',$request->session()->get('user_id'))->get()[0];
+
+        $user = User::where('id',1)->get()[0];
+        return $user;
+    }
 }

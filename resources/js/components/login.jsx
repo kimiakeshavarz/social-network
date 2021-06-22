@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Redirect } from "react-router-dom";
-import 
-{ Container,Button,Card,InputGroup,Form,FormControl,Alert } 
+import { withRouter } from 'react-router-dom';
+import { Container,Button,Card,InputGroup,Form,FormControl,Alert } 
 from 'react-bootstrap';
 class Login extends React.Component{
 
@@ -30,7 +30,6 @@ class Login extends React.Component{
     }
 
     render() {
-
         return (
             <Container fluid className="pb-5 w-100 h-100 bg-secondary ">
             <div className='row pt-5 d-flex justify-content-center w-100 h-100'>
@@ -57,5 +56,5 @@ class Login extends React.Component{
         );
     }
 }
-export default Login;
+export default withRouter(Login);
 

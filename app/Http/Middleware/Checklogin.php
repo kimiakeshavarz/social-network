@@ -16,9 +16,9 @@ class Checklogin
      */
     public function handle(Request $request, Closure $next)
     {
-        if($request->session()->missing('user_id'))
-        {
 
+        if(Session::has('user_id'))
+        {
         }
         return $next($request);
     }

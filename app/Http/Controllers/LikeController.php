@@ -6,8 +6,11 @@ use Illuminate\Http\Request;
 
 class LikeController extends Controller
 {
-    function like($user_id,$post_id){
+    function like(Request $request){
     	
+        $user_id = $request->user_id;
+        $post_id = $request->post_id;
+
     	$like = new Like;
     	$like->user_id = $user_id;
     	$like->post_id = $post_id;
@@ -15,7 +18,10 @@ class LikeController extends Controller
     	return redirect('dashboard.php');
     }
 
-    function unlike($user_id,$post_id){
+    function unlike(Request $request){
+
+        $user_id = $request->user_id;
+        $post_id = $request->post_id;
     	Like::where('user_id',$user_id)::where('post_id',$post_id)->first()->forceDelete();
     }
 }
