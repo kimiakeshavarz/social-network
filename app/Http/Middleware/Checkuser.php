@@ -4,6 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use JWTAuth;
 
 class Checkuser
 {
@@ -16,10 +18,7 @@ class Checkuser
      */
     public function handle(Request $request, Closure $next)
     {
-        if($request->session('user_id') != $request->route('user_id'))
-        {
-
-        } 
+        echo JWTAuth::parseToken();
         return $next($request);
     }
 }

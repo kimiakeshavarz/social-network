@@ -5,16 +5,26 @@ import Select from 'react-select';
 import MyPosts from './myposts.jsx';
 import Notifs from './notifications.jsx';
 import { withRouter } from 'react-router-dom';
+import Cookies from 'universal-cookie';
 
 class Profile extends React.Component{
 
 	constructor(props){
         super(props);
-        this.state = {posts:[1],followings:[],followers:[],options:[],current_user:[],logged_user:[],user_id:1};
+        this.state = {posts:[1],followings:[],followers:[],options:[],current_user:[],logged_user:[],user_id:1,token:props.token};
+        const cookies = new Cookies();
+        alert(cookies.get('user_id'));
+
 
     }
 
     componentDidMount(){
+    	axios.interceptors.request.use(function (config) {
+
+    		config.headers.Authorization =  this.state.token;
+
+   			return config;
+		});
         this.getLoggedUser();
         this.getCurrentUser();
         this.getPosts();

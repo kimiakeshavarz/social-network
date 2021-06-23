@@ -4,6 +4,7 @@ import { Redirect } from "react-router-dom";
 import { withRouter } from 'react-router-dom';
 import { Container,Button,Card,InputGroup,Form,FormControl,Alert } 
 from 'react-bootstrap';
+import Cookies from 'universal-cookie';
 class Login extends React.Component{
 
     constructor(props){
@@ -16,15 +17,20 @@ class Login extends React.Component{
         var username = $('#username').val();
         var password = $('#password').val();
 
+        var self = this; 
+
         axios.post('/api/login',{email:username,password:password}).then(
             function(response){
-                if(response.data.toString() == "true")
+                if(response.data.toString() == "false")
                 {
-                    this.setState({Redirect:true});
+                    ReactDOM.render(<Alert variant='danger'>Username or password is incorrect.</Alert>,document.getElementById('alert'));
                 }
                 else
                 {
-                    ReactDOM.render(<Alert variant='danger'>Username or password is incorrect.</Alert>,document.getElementById('alert'));
+                    const cookies = new Cookies();
+                    cookies.set('token',response.data.token);
+                    cookies.set('user_id',response.data.user_id);
+                    self.setState({Redirect:true});
                 }
         });   
     }

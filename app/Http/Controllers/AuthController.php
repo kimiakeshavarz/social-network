@@ -19,13 +19,13 @@ class AuthController extends Controller
         $password = $request->password;
             //$request->session()->put('uer_id',$users[0]->id);
         $token = JWTAuth::attempt(['email'=>$email,'password'=>$password]);
-        if(!$token){
-            return dd($token);
-
-
+        if($token){
+            $user = Auth::user();
+            return json_encode(array('user_id'=>$user->id,'token'=>$token));
         }
-        return $token;
-
+    else{
+        return 'false';
+    }
     }
 
     function checkRegister(Request $request)
@@ -49,11 +49,11 @@ class AuthController extends Controller
     		$new_user->profile = $profile;
     		$new_user->save();
             $token = JWTAuth::fromUser($new_user);
-    		return $token;
+    		return json_encode(array('user_id'=>$new_user->id,'token'=>$new_user->token));
     	}
     	else
     	{
-    		return 'false';
+    		return 'exists';
     	}
     }
 }
