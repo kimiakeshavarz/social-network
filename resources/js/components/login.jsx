@@ -16,7 +16,7 @@ class Login extends React.Component{
         var username = $('#username').val();
         var password = $('#password').val();
 
-        axios.post('/api/login',{username:username,password:password}).then(
+        axios.post('/api/login',{email:username,password:password}).then(
             function(response){
                 if(response.data.toString() == "true")
                 {

@@ -4178,6 +4178,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/esm/react-router.js");
 /* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Alert.js");
 /* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Container.js");
 /* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Card.js");
@@ -4213,6 +4214,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
+
 var Login = /*#__PURE__*/function (_React$Component) {
   _inherits(Login, _React$Component);
 
@@ -4236,7 +4238,7 @@ var Login = /*#__PURE__*/function (_React$Component) {
       var username = $('#username').val();
       var password = $('#password').val();
       axios.post('/api/login', {
-        username: username,
+        email: username,
         password: password
       }).then(function (response) {
         if (response.data.toString() == "true") {
@@ -4308,7 +4310,7 @@ var Login = /*#__PURE__*/function (_React$Component) {
   return Login;
 }(react__WEBPACK_IMPORTED_MODULE_0__.Component);
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Login);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,react_router_dom__WEBPACK_IMPORTED_MODULE_8__.withRouter)(Login));
 
 /***/ }),
 
@@ -4652,9 +4654,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Image.js");
 /* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Nav.js");
 /* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Form.js");
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Button.js");
 /* harmony import */ var react_select__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-select */ "./node_modules/react-select/dist/react-select.esm.js");
 /* harmony import */ var _myposts_jsx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./myposts.jsx */ "./resources/js/components/myposts.jsx");
 /* harmony import */ var _notifications_jsx__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./notifications.jsx */ "./resources/js/components/notifications.jsx");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/esm/react-router.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -4687,6 +4691,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
+
 var Profile = /*#__PURE__*/function (_React$Component) {
   _inherits(Profile, _React$Component);
 
@@ -4701,27 +4706,26 @@ var Profile = /*#__PURE__*/function (_React$Component) {
     _this.state = {
       posts: [1],
       followings: [],
-      user_id: 1,
       followers: [],
       options: [],
       current_user: [],
-      dashboard: props.dashboard
+      logged_user: [],
+      user_id: 1
     };
-
-    _this.getPosts();
-
-    _this.getFollowings();
-
-    _this.getFollowers();
-
-    _this.getAllUsers();
-
-    _this.getCurrentUser();
-
     return _this;
   }
 
   _createClass(Profile, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this.getLoggedUser();
+      this.getCurrentUser();
+      this.getPosts();
+      this.getAllUsers();
+      this.getFollowings();
+      this.getFollowers();
+    }
+  }, {
     key: "getAllUsers",
     value: function getAllUsers() {
       var self = this;
@@ -4730,6 +4734,17 @@ var Profile = /*#__PURE__*/function (_React$Component) {
           options: response.data
         });
       });
+    }
+  }, {
+    key: "isFollowed",
+    value: function isFollowed() {
+      for (var i = 0; i < this.state.followers.length; i++) {
+        if (this.state.followers[i].follower == this.state.logged_user.id) {
+          return true;
+        }
+      }
+
+      return false;
     }
   }, {
     key: "goUserProfile",
@@ -4748,19 +4763,30 @@ var Profile = /*#__PURE__*/function (_React$Component) {
     key: "getFollowings",
     value: function getFollowings() {
       var self = this;
-      axios.get("/api/getfollowings/" + this.state.user_id).then(function (response) {
+      axios.get("/api/getfollowings/1").then(function (response) {
         self.setState({
           followings: response.data
         });
+        ;
       });
     }
   }, {
     key: "getFollowers",
     value: function getFollowers() {
       var self = this;
-      axios.get("/api/getfollowers/" + this.state.user_id).then(function (response) {
+      axios.get("/api/getfollowers/1").then(function (response) {
         self.setState({
           followers: response.data
+        });
+      });
+    }
+  }, {
+    key: "getLoggedUser",
+    value: function getLoggedUser() {
+      var self = this;
+      axios.get("/api/getloggeduser/").then(function (response) {
+        self.setState({
+          logged_user: response.data
         });
       });
     }
@@ -4768,12 +4794,20 @@ var Profile = /*#__PURE__*/function (_React$Component) {
     key: "getCurrentUser",
     value: function getCurrentUser() {
       var self = this;
-      var user_id = this.state.user_id;
-      axios.get("/api/getuserinfo/" + user_id).then(function (response) {
-        self.setState({
-          current_user: response.data
+      var url_parts = window.location.pathname.split('/');
+
+      if (url_parts[url_parts.length - 2] != 'profile') {
+        var user_id = url_parts[url_parts.length - 1];
+        axios.get("/api/getuserinfo/" + this.state.user_id).then(function (response) {
+          self.setState({
+            current_user: response.data
+          });
         });
-      });
+      } else {
+        this.setState({
+          current_user: this.state.logged_user
+        });
+      }
     }
   }, {
     key: "getFollowingUser",
@@ -4787,6 +4821,38 @@ var Profile = /*#__PURE__*/function (_React$Component) {
       return false;
     }
   }, {
+    key: "follow",
+    value: function follow(user_id) {
+      axios.post('/api/follow/', {
+        followed_id: user_id,
+        following_id: this.state.logged_user.id
+      }).then(function (response) {});
+    }
+  }, {
+    key: "unfollow",
+    value: function unfollow(user_id) {
+      axios.post('/api/unfollow/', {
+        followed_id: user_id,
+        following_id: this.state.logged_user.id
+      }).then(function (response) {});
+    }
+  }, {
+    key: "like",
+    value: function like(post_id) {
+      axios.post('/api/like', {
+        post_id: post_id,
+        user_id: this.state.logged_user.id
+      }).then(function (response) {});
+    }
+  }, {
+    key: "unlike",
+    value: function unlike(post_id) {
+      axios.post('/api/unlike', {
+        post_id: post_id,
+        user_id: this.state.logged_user.id
+      }).then(function (response) {});
+    }
+  }, {
     key: "render",
     value: function render() {
       var self = this;
@@ -4796,7 +4862,7 @@ var Profile = /*#__PURE__*/function (_React$Component) {
         fluid: true,
         className: "bg-secondary h-100 w-100 p-3 ",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_6__.default, {
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_myposts_jsx__WEBPACK_IMPORTED_MODULE_2__.default, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__.default, {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__.default, {
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_6__.default, {
               className: "w-100 d-flex justify-content-center",
               children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_select__WEBPACK_IMPORTED_MODULE_8__.default, {
@@ -4808,7 +4874,7 @@ var Profile = /*#__PURE__*/function (_React$Component) {
               })
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_6__.default, {
               className: "w-100 h-100 ",
-              children: this.state.posts.map(function (post, index) {
+              children: this.state.current_user.id == this.state.logged_user.id ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_myposts_jsx__WEBPACK_IMPORTED_MODULE_2__.default, {}) : this.state.posts.map(function (post, index) {
                 var user = self.getFollowingUser(self.state.posts[index].user_id);
                 var user_id = user.id;
 
@@ -4893,7 +4959,17 @@ var Profile = /*#__PURE__*/function (_React$Component) {
                       children: [this.state.followings.length, " Followings"]
                     })
                   })]
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_notifications_jsx__WEBPACK_IMPORTED_MODULE_3__.default, {})]
+                }), this.state.current_user.id == this.state.logged_user.id ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {}) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_12__.default.Group, {
+                  children: this.isFollowed() ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_13__.default, {
+                    id: "follow",
+                    onClick: this.follow(),
+                    children: "Follow"
+                  }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_13__.default, {
+                    id: "unfollow",
+                    onClick: this.unfollow(),
+                    children: "UnFollow"
+                  })
+                })]
               })
             })
           })]
@@ -4905,7 +4981,7 @@ var Profile = /*#__PURE__*/function (_React$Component) {
   return Profile;
 }(react__WEBPACK_IMPORTED_MODULE_0__.Component);
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Profile);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,react_router_dom__WEBPACK_IMPORTED_MODULE_14__.withRouter)(Profile));
 
 /***/ }),
 

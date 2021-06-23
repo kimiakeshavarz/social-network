@@ -6,29 +6,26 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use JWTAuth;
 use Session; 
 class AuthController extends Controller
 {
+
     function checkLogin(Request $request)
     {   
-        $username = $request->username;
+        $credentials = $request->only('email', 'password');
+        $email = $request->email;
         $password = $request->password;
-    	$users = User::where('username',$username)->where('password',$password)->get();
-    	if(count($users) == 1)
-    	{
-
-            //$request->session()->put('user_id',$users[0]->id);
-            if(Auth::attempt(['username'=>$username,'password'=>$password])){
+            //$request->session()->put('uer_id',$users[0]->id);
+        $token = JWTAuth::attempt(['email'=>$email,'password'=>$password]);
+        if(!$token){
+            return dd($token);
 
 
+        }
+        return $token;
 
-            return 'true';
-            }
-    	}
-    	else
-    	{
-    		return 'false';
-    	}
     }
 
     function checkRegister(Request $request)
@@ -48,11 +45,11 @@ class AuthController extends Controller
     		$new_user->lastname = $lastname;
     		$new_user->username = $username;
     		$new_user->email = $email;
-    		$new_user->password = $password;
+    		$new_user->password = Hash::make($password);
     		$new_user->profile = $profile;
     		$new_user->save();
-            $request->session()->put('user_id',$users[0]->id);
-    		return 'true';
+            $token = JWTAuth::fromUser($new_user);
+    		return $token;
     	}
     	else
     	{
