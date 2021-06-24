@@ -21,10 +21,10 @@ class AuthController extends Controller
         $token = JWTAuth::attempt(['email'=>$email,'password'=>$password]);
         if($token){
             $user = Auth::user();
-            return json_encode(array('user_id'=>$user->id,'token'=>$token));
+            return json_encode(array('logged_user'=>$user,'token'=>$token));
         }
     else{
-        return 'false';
+        abort(401,'Unauthorized action');
     }
     }
 
@@ -36,6 +36,8 @@ class AuthController extends Controller
         $password = $request->password;
         $profile = $request->profile;
         $email = $request->email;
+        $bio = $request->bio;
+
     	$users = User::where('username',$username)->orwhere('email',$email)->get();
 
     	if(count($users) == 0)
@@ -46,14 +48,22 @@ class AuthController extends Controller
     		$new_user->username = $username;
     		$new_user->email = $email;
     		$new_user->password = Hash::make($password);
-    		$new_user->profile = $profile;
+            $request->profile->move(public_path('images/profiles'), $username.'.jpg');  
+            $new_user->profile = '/images/profiles/'.$username.'.jpg';
+            $new_user->bio = $bio;
     		$new_user->save();
             $token = JWTAuth::fromUser($new_user);
-    		return json_encode(array('user_id'=>$new_user->id,'token'=>$new_user->token));
+    		return json_encode(array('logged_user'=>$new_user,'token'=>$token));
     	}
     	else
     	{
-    		return 'exists';
+            abort(401,'Duplicate users');
     	}
+    }
+
+    function uploadProfile($uploadpath,$file_data){
+        
+        move_uploaded_file($file_data,$uploadpath);
+
     }
 }

@@ -13,8 +13,8 @@ class UserController extends Controller
 	}
 
     function getUserInfo(Request $request){
-        $user_id = $request->user_id;
-    	return User::where('id',$user_id)->get()[0]->toJson();
+        $username = $request->username;
+    	return User::where('username',$username)->get()[0]->toJson();
     }
 
     function getUsers(){
@@ -30,8 +30,8 @@ class UserController extends Controller
     	   if($text == Null || $this->startsWith($user->firstname,$text) || $this->startsWith($user->lastname,$text) || $this->startsWith($user->username,$text) ){
 
                 $item = array();
-                $item['label'] = $user->firstname . ' '. $user->lastname.' @'.$user->username;
-                $item['value'] = $user->firstname . $user->lastname;
+                $item['label'] = ' @'.$user->username;
+                $item['value'] = 'profile/'.$user->username;
 			    array_push($matched_users,$item);
             }
 
@@ -40,10 +40,5 @@ class UserController extends Controller
     	return json_encode($matched_users);
     }
 
-    function getLoggedUser(Request $request){
-        //$user = User::where('id',$request->session()->get('user_id'))->get()[0];
 
-        $user = User::where('id',1)->get()[0];
-        return $user;
-    }
 }

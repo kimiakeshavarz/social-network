@@ -4,6 +4,7 @@ import { Redirect } from "react-router-dom";
 import
 { Container,Row,Col,Button,Card,InputGroup,Form,FormControl,Alert } 
 from 'react-bootstrap';
+import Cookies from 'universal-cookie';
 
 class Register extends React.Component{
 
@@ -12,17 +13,41 @@ class Register extends React.Component{
         this.state = {Redirect:false};
     }
 
+    validateRequireds(){
+        
+        var firstname = $("#firstname").val();
+        var lastname = $("#lastname").val();
+        var username = $("#username").val();
+        var email = $("#email").val();
+        var password = $("#password").val();
+        if(!email || !lastname || !username || !password){
+            ReactDOM.render(<Alert variant='danger'>All fields must be filled. </Alert>,document.getElementById('alert'));
+
+            return false;
+        }
+
+        return true;
+    }
+
     validatePassword(){
         var password = $("#password").val();
         var password2 = $("#password2").val();
+
         if(password != password2)
         {
-            ReactDOM.render(<Alert>passwords not matched</Alert>,document.getElementById('alert'));
+            ReactDOM.render(<Alert variant='danger'>passwords not matched</Alert>,document.getElementById('alert'));
+            return false;
         }
-        if(len(password) < 8){
-            ReactDOM.render(<Alert>password must be </Alert>,document.getElementById('alert'));
 
+        if(password.length < 8){
+            ReactDOM.render(<Alert variant='danger'>password must be equal or more than 8 characters </Alert>,document.getElementById('alert'));
+            return false;
         }
+
+        return true;
+    }
+    onFileChanged(e){
+            this.setState({file:e.target.files[0]});
     }
     onSubmit(){
         
@@ -30,27 +55,50 @@ class Register extends React.Component{
         var lastname = $('#lastname').val();
         var username = $('#username').val();
         var password = $('#password').val();
-        var email = $('#e-mail').val();
-        var profile = $('#picture').val();
+        var bio = $('#bio').val();
+        var email = $('#email').val();
+        var profile = this.state.file;
 
-        axios.post('/api/register',{firstname:firstname,lastname:lastname,email:email,username:username,password:password,profile:profile}).then(
+        const formData = new FormData();
+        formData.append('firstname',firstname);
+        formData.append('lastname',lastname);
+        formData.append('username',username);
+        formData.append('password',password);
+        formData.append('bio',bio);
+        formData.append('profile',profile);
+        formData.append('email',email);
+
+        var self = this; 
+
+        if(this.validateRequireds() && this.validatePassword())
+        axios.post('/api/register',formData,{headers:{"Content-Type": "multipart/form-data"}}).then(
             function(response){
-                alert(response.date);
-                if(response.data.toString() == "true")
+                if(response.status == 200)
                 {
-                    alert("DASD");
-                    this.setState({Redirect:true});
+
+                    const cookies = new Cookies();
+                    cookies.set('token',response.data.token);
+                    cookies.set('logged_user',response.data.logged_user);
+
+                    self.setState({Redirect:true});
                 }
+        }).catch(function(error){
+            ReactDOM.render(<Alert variant='danger'>Duplicate Informations.</Alert>,document.getElementById('alert'));
+
         });   
     }
 
     render() {    
+
+        if(this.state.Redirect == true){
+            return <Redirect to='/dashboard' />;
+        }
         return (
-            <Container fluid className='bg-secondary w-100 h-100 p-5'>
-                <Row className="d-flex justify-content-center p-5 h-75">
+            <Container fluid className='p-5'>
+                <Row className="d-flex justify-content-center p-5">
                 <div id='alert'></div>
                     <Col md='5'>
-                        <Card className='bg-light'>
+                        <Card className='bg-light '>
                             <Card.Body>
                             <Card.Title><h5>please fill inputs.</h5></Card.Title>
                             <Form.Group className='mt-5'>
@@ -65,11 +113,11 @@ class Register extends React.Component{
                             </Form.Group>
 
                             <Form.Group className='mt-4'>
-                            <Form.Control id='username' placeholder='Username'required />
+                            <Form.Control id='username' placeholder='Username' required />
                             </Form.Group>
 
                             <Form.Group className='mt-4'>
-                            <Form.Control id='e-mail' placeholder='Email address' requreid/>
+                            <Form.Control id='email' placeholder='Email address'  />
                             </Form.Group>
 
                             <Form.Group className='mt-4 '  >
@@ -83,12 +131,16 @@ class Register extends React.Component{
                             </Row>
                             </Form.Group>
 
+                            <Form.Group className='mt-4'>
+                            <Form.Control as='textarea' id='bio' placeholder='Bio' requrired/>
+                            </Form.Group>
+
                             <Form.Group className='m-4 d-flex justify-content-end'>
                             <Form.Label for='picture' className=' btn btn-sm btn-warning'>Select profile</Form.Label >
-                            <Form.Control type='file' id='picture' required hidden/>
+                            <Form.Control type='file' id='picture' required onChange={this.onFileChanged.bind(this)} hidden/>
                             </Form.Group>
                             <Form.Group className='d-flex justify-content-center'>
-                                <button className='btn btn-success btn-lg' onClick={this.onSubmit}>Sign    up</button>
+                                <button className='btn btn-success btn-lg' onClick={this.onSubmit.bind(this)}>Sign    up</button>
                             </Form.Group>
                             <Card.Link className='mt-3 d-flex justify-content-center'>
                             <a href='/login'>already has an account?</a>

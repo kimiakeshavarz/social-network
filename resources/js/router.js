@@ -19,7 +19,6 @@ function App(){
 			<Route path='/dashboard'>
 				<Profile dashboard={true}/>
 			</Route>
-			<Route path='/addpost' component={Addpost} />
 			<Route path='/' component={Login} />
 			</Switch>
 		</BrowserRouter>

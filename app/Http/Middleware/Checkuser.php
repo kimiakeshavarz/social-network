@@ -18,7 +18,10 @@ class Checkuser
      */
     public function handle(Request $request, Closure $next)
     {
-        echo JWTAuth::parseToken();
+        if( json_decode($request->cookie('logged_user'))->id != JWTAuth::user()->id ){
+            abort(401,'Unauthorized action');
+        }
+        
         return $next($request);
     }
 }

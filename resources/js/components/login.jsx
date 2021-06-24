@@ -17,25 +17,34 @@ class Login extends React.Component{
         var username = $('#username').val();
         var password = $('#password').val();
 
-        var self = this; 
+        var selff = this; 
 
         axios.post('/api/login',{email:username,password:password}).then(
             function(response){
-                if(response.data.toString() == "false")
+
+                if(response.status == 200)
                 {
-                    ReactDOM.render(<Alert variant='danger'>Username or password is incorrect.</Alert>,document.getElementById('alert'));
-                }
-                else
-                {
+
                     const cookies = new Cookies();
                     cookies.set('token',response.data.token);
-                    cookies.set('user_id',response.data.user_id);
-                    self.setState({Redirect:true});
+                    cookies.set('logged_user',response.data.logged_user);
+                    selff.setState({Redirect:true});
+
                 }
+
+        }).catch(function(error){
+
+            console.log(error);
+            ReactDOM.render(<Alert variant='danger'>Username or password is incorrect.</Alert>,document.getElementById('alert'));
+
         });   
     }
 
     render() {
+
+        if(this.state.Redirect == true){
+            return <Redirect to='/dashboard' />
+        }
         return (
             <Container fluid className="pb-5 w-100 h-100 bg-secondary ">
             <div className='row pt-5 d-flex justify-content-center w-100 h-100'>
@@ -44,13 +53,13 @@ class Login extends React.Component{
                             <Card.Body className='mt-4'>
                             <Card.Title><h5>please fill the inputs.</h5></Card.Title>
                             <Form.Group className='mt-5'>
-                            <Form.Control id='username'  placeholder='Username or email' required/>
+                            <Form.Control id='username'  placeholder='E-mail address' required/>
                             </Form.Group>
                             <Form.Group className='mt-4'>
                             <Form.Control id='password' type='password' placeholder='Password' required/>
                             </Form.Group>
                             <Form.Group className='mt-5 d-flex justify-content-center'>
-                                <Button className='btn btn-primary btn-lg' onClick={this.onSubmit}>Login</Button>
+                                <Button className='btn btn-primary btn-lg' onClick={this.onSubmit.bind(this)}>Login</Button>
                             </Form.Group>
                             <div className='mt-4'>
                             <Card.Link href='/register'>Not have account?</Card.Link>

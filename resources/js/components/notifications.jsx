@@ -50,6 +50,8 @@ render()
 {
 	var self = this;
 
+	if(this.state.requests.length <= 0)
+		return(<div className='mt-3'><h3>No requests yet</h3></div>);
 	return (self.state.requests.map(function(request){
 		var user = self.getUserInfo(self.state.user_id); 
 		return(<Card className='bg-light'>

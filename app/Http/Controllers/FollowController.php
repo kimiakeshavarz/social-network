@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Follower;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
+use JWTAuth;
 class FollowController extends Controller
 {
     function follow(Request $request)
@@ -32,7 +34,7 @@ class FollowController extends Controller
     {
         $user_id = $request->user_id;
         if($user_id == Null)
-            $user_id = $request->session->get('user_id');
+            $user_id = JWTAuth::user()->id;
         $followers = Follower::where('follower',$user_id)->where('accepted',1)->get();
         $follower_infos = array();
         foreach ($followers as $follower) {
@@ -46,7 +48,7 @@ class FollowController extends Controller
     {
         $user_id = $request->user_id;
         if($user_id == Null)
-            $user_id = $request->session->get('user_id');
+            $user_id = JWTAuth::user()->id;
         $followers = Follower::where('followed',$user_id)->where('accepted',1)->get();
         $follower_infos = array();
         foreach ($followers as $follower) {
@@ -60,7 +62,7 @@ class FollowController extends Controller
     {
         $user_id = $request->user_id;
         if($user_id == Null)
-            $user_id = $request->session->get('user_id');
+            $user_id = JWTAuth::user()->id;
         $followers = Follower::where('followed',$user_id)->where('accepted',0)->get();
         $follower_infos = array();
         foreach ($followers as $follower) {

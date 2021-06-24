@@ -29,7 +29,6 @@ Route::group(['middleware'=>'jwt.auth'],function(){
 	
 	Route::get('getsession',[PostController::class,"getSession"]);
 
-	Route::group(['middleware'=>'checklogin'],function(){
 		
 		Route::group(['middleware'=>'checkuser'],function(){
 			
@@ -40,7 +39,7 @@ Route::group(['middleware'=>'jwt.auth'],function(){
 			Route::post('unfollow',[FollowController::class,"unfollow"]);
 			
 			Route::post('like',[LikeController::class,"like"]);
-			Route::post('unlike',[LikeController::class,"unlike"]);
+			Route::post('dislike',[LikeController::class,"unlike"]);
 			Route::get('getrequests/{user_id}',[FollowController::class,"getRequests"]);
 			Route::post('acceptfollow',[FollowController::class,"acceptFollow"]);
 
@@ -50,16 +49,17 @@ Route::group(['middleware'=>'jwt.auth'],function(){
 
 		Route::get('getposts/{user_id}',[PostController::class,"getUserPosts"]);
 		
+		Route::post('getlikes/{post_id}',[LikeController::class,"like"]);
+
 		Route::get('getposts',[PostController::class,"getAllPosts"]);
 
 		Route::get('getfollowers/{user_id?}',[FollowController::class,"getfollowers"]);
 		Route::get('getfollowings/{user_id?}',[FollowController::class,"getfollowings"]);
 
 		Route::get('getusers',[UserController::class,"getUsers"]);
-		Route::get('getuserinfo/{user_id}',[UserController::class,"getUserInfo"]);
-		Route::get('getuserinfo/{user_id}',[UserController::class,"getUserInfo"]);
+		Route::get('getuserinfo/{username}',[UserController::class,"getUserInfo"]);
+		Route::get('getuserinfo/{username}',[UserController::class,"getUserInfo"]);
 
 		Route::get('searchuser/{text?}',[UserController::class,"searchUser"]);
 
-	});
 });
