@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use JWTAuth;
 use Session; 
+use Mail;
 class AuthController extends Controller
 {
 
@@ -51,8 +52,14 @@ class AuthController extends Controller
             $request->profile->move(public_path('images/profiles'), $username.'.jpg');  
             $new_user->profile = '/images/profiles/'.$username.'.jpg';
             $new_user->bio = $bio;
+            $new_user->enabled = False;
     		$new_user->save();
             $token = JWTAuth::fromUser($new_user);
+            $link = $request->getHttpHost().'/accept/'.$new_user->id;
+            $data = array('activation link :'=>$link);
+            Mail::send(['text'=>'mail'],$data,function($message){
+
+            });
     		return json_encode(array('logged_user'=>$new_user,'token'=>$token));
     	}
     	else
@@ -65,5 +72,12 @@ class AuthController extends Controller
         
         move_uploaded_file($file_data,$uploadpath);
 
+    }
+
+    function acceptUser(Request $request){
+        $user_id = $request->user_id;
+
+        User::where('id',$user_id)->update(['enabled'=>True]);
+        return redirect('/login');
     }
 }

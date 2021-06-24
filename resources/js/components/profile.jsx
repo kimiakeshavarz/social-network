@@ -31,6 +31,11 @@ class Profile extends React.Component{
    			return config;
 		});
 
+		if(this.state.logged_user.enabled == false){
+			alert('You have to activate your account');
+			this.setState({Redirect:true});
+
+		}
         if(this.state.logged_user === undefined){
 
             this.setState({Redirect:true});
@@ -108,7 +113,7 @@ class Profile extends React.Component{
     getFollowings(){
 
         var self = this;
-        axios.get("/api/getfollowings/1").then(function(response){
+        axios.get("/api/getfollowings/"+this.state.logged_user.id).then(function(response){
 
                 self.setState({followings:response.data});
  																																																																																											          ;
@@ -121,7 +126,7 @@ class Profile extends React.Component{
     getFollowers(){
 
         var self = this;
-        axios.get("/api/getfollowers/1").then(function(response){
+        axios.get("/api/getfollowers/"+this.state.logged_user.id).then(function(response){
                 self.setState({followers:response.data});
             }).catch(function(error){
 
@@ -168,7 +173,7 @@ class Profile extends React.Component{
         return false;
     }
 
-   	follow(user_id){
+   	follow(){
 
    		var self = this;
    		axios.post('/api/follow/',{followed_id:this.state.current_user.id,following_id:this.state.logged_user.id}).then(
@@ -181,7 +186,7 @@ class Profile extends React.Component{
         });
 	}
 
-	unfollow(user_id){
+	unfollow(){
 
 		var self = this;
 
@@ -328,8 +333,9 @@ class Profile extends React.Component{
                 </Row>
                 {this.state.current_user.id == this.state.logged_user.id?<div></div>:
                 <Form.Group>
-                	{this.isFollowed()?<Button id='follow' onClick={this.follow.bind(this)}>Follow</Button>:<Button id='unfollow' onClick={this.unfollow.bind(this)}>UnFollow</Button>}
+                	{this.isFollowed()?<Button id='unfollow' onClick={this.unfollow.bind(this)}>UnFollow</Button>:<Button id='follow' onClick={this.follow.bind(this)}>Follow</Button>}
                 </Form.Group>}
+
                 </Tab>
               		<Tab eventKey="home" title="Requests">
     					<Notifs />

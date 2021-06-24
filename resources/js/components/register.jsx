@@ -79,7 +79,7 @@ class Register extends React.Component{
                     const cookies = new Cookies();
                     cookies.set('token',response.data.token);
                     cookies.set('logged_user',response.data.logged_user);
-
+                    alert('Your activation link has sent to your email.Check your inbox.');
                     self.setState({Redirect:true});
                 }
         }).catch(function(error){

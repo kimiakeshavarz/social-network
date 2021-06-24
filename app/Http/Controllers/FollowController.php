@@ -17,7 +17,7 @@ class FollowController extends Controller
 
     	$follower = new Follower;
     	$follower->follower = $follower_id;
-    	$follower->followed = $followed_id;
+    	$follower->followed = $following_id;
         $follower->accepted = 0;
     	$follower->save();
     }
@@ -35,10 +35,10 @@ class FollowController extends Controller
         $user_id = $request->user_id;
         if($user_id == Null)
             $user_id = JWTAuth::user()->id;
-        $followers = Follower::where('follower',$user_id)->where('accepted',1)->get();
+        $followers = Follower::where('followed',$user_id)->where('accepted',1)->get();
         $follower_infos = array();
         foreach ($followers as $follower) {
-            $info = User::where('id',$user_id)->get()[0];
+            $info = User::where('id',$follower->follower)->get()[0];
             array_push($follower_infos,$info);
         }
     	return json_encode($follower_infos);
@@ -49,10 +49,10 @@ class FollowController extends Controller
         $user_id = $request->user_id;
         if($user_id == Null)
             $user_id = JWTAuth::user()->id;
-        $followers = Follower::where('followed',$user_id)->where('accepted',1)->get();
+        $followers = Follower::where('follower',$user_id)->where('accepted',1)->get();
         $follower_infos = array();
         foreach ($followers as $follower) {
-            $info = User::where('id',$user_id)->get()[0];
+            $info = User::where('id',$follower->followed)->get()[0];
             array_push($follower_infos,$info);
         }
         return json_encode($follower_infos);
@@ -60,13 +60,11 @@ class FollowController extends Controller
 
     function getRequests(Request $request)
     {
-        $user_id = $request->user_id;
-        if($user_id == Null)
-            $user_id = JWTAuth::user()->id;
+        $user_id = JWTAuth::user()->id;
         $followers = Follower::where('followed',$user_id)->where('accepted',0)->get();
         $follower_infos = array();
         foreach ($followers as $follower) {
-            $info = User::where('id',$user_id)->get()[0];
+            $info = User::where('id',$follower->follower)->get()[0];
             array_push($follower_infos,$info);
         }
         return json_encode($follower_infos);

@@ -9442,10 +9442,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
-/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Card.js");
-/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Row.js");
-/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Col.js");
-/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Button.js");
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Card.js");
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Row.js");
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Col.js");
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Button.js");
+/* harmony import */ var universal_cookie__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! universal-cookie */ "./node_modules/universal-cookie/es6/index.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -9475,6 +9476,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
+
 var Notifs = /*#__PURE__*/function (_React$Component) {
   _inherits(Notifs, _React$Component);
 
@@ -9486,10 +9488,11 @@ var Notifs = /*#__PURE__*/function (_React$Component) {
     _classCallCheck(this, Notifs);
 
     _this = _super.call(this, props);
+    var cookies = new universal_cookie__WEBPACK_IMPORTED_MODULE_3__.default();
     _this.state = {
       requests: [],
       lastuser: 0,
-      user_id: 1
+      logged_user: cookies.get('logged_user')
     };
 
     _this.getRequests(_this.state.user_id);
@@ -9508,7 +9511,7 @@ var Notifs = /*#__PURE__*/function (_React$Component) {
     key: "getRequests",
     value: function getRequests(user_id) {
       var self = this;
-      axios.get("/api/getrequests/" + user_id).then(function (response) {
+      axios.get("/api/getrequests/" + this.state.logged_user.id).then(function (response) {
         self.setState({
           requests: response.data
         });
@@ -9517,21 +9520,27 @@ var Notifs = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "follow",
     value: function follow(follower_id, followed_id) {
+      var self = this;
       axios.post("/api/acceptfollow/", {
         follower_id: follower_id,
         followed_id: followed_id
       }).then(function (response) {
-        return response.data;
+        self.setState({
+          requests: self.state.requests
+        });
       });
     }
   }, {
     key: "unfollow",
     value: function unfollow(follower_id, followed_id) {
+      var self = this;
       axios.post("/api/unfollow/", {
         follower_id: follower_id,
         followed_id: followed_id
       }).then(function (response) {
-        return response.data;
+        self.setState({
+          requests: self.state.requests
+        });
       });
     }
   }, {
@@ -9545,29 +9554,30 @@ var Notifs = /*#__PURE__*/function (_React$Component) {
         })
       });
       return self.state.requests.map(function (request) {
-        var user = self.getUserInfo(self.state.user_id);
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_3__.default, {
+        console.log(request);
+        var user = self.getUserInfo(request.id);
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_4__.default, {
           className: "bg-light",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_3__.default.Body, {
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_4__.default, {
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_5__.default, {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_4__.default.Body, {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_5__.default, {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_6__.default, {
                 children: [user.firstname, " ", user.lastname, " has requested to follow you."]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_5__.default, {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_6__.default, {
                 md: "2",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_6__.default, {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__.default, {
                   className: "primary",
                   onClick: function onClick() {
-                    return self.follow(user.id, self.state.user_id);
+                    return self.follow(user.id, self.state.logged_user.id);
                   },
                   roundedCircle: true,
                   children: "Accept"
                 })
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_5__.default, {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_6__.default, {
                 md: "2",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_6__.default, {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__.default, {
                   className: "primary",
                   onClick: function onClick() {
-                    return self.unfollow(user.id, self.state.user_id);
+                    return self.unfollow(user.id, self.state.logged_user.id);
                   },
                   roundedCircle: true,
                   children: "Reject"
@@ -9688,6 +9698,13 @@ var Profile = /*#__PURE__*/function (_React$Component) {
         return config;
       });
 
+      if (this.state.logged_user.enabled == false) {
+        alert('You have to activate your account');
+        this.setState({
+          Redirect: true
+        });
+      }
+
       if (this.state.logged_user === undefined) {
         this.setState({
           Redirect: true
@@ -9775,7 +9792,7 @@ var Profile = /*#__PURE__*/function (_React$Component) {
     key: "getFollowings",
     value: function getFollowings() {
       var self = this;
-      axios.get("/api/getfollowings/1").then(function (response) {
+      axios.get("/api/getfollowings/" + this.state.logged_user.id).then(function (response) {
         self.setState({
           followings: response.data
         });
@@ -9790,7 +9807,7 @@ var Profile = /*#__PURE__*/function (_React$Component) {
     key: "getFollowers",
     value: function getFollowers() {
       var self = this;
-      axios.get("/api/getfollowers/1").then(function (response) {
+      axios.get("/api/getfollowers/" + this.state.logged_user.id).then(function (response) {
         self.setState({
           followers: response.data
         });
@@ -9841,7 +9858,7 @@ var Profile = /*#__PURE__*/function (_React$Component) {
     }
   }, {
     key: "follow",
-    value: function follow(user_id) {
+    value: function follow() {
       var self = this;
       axios.post('/api/follow/', {
         followed_id: this.state.current_user.id,
@@ -9858,7 +9875,7 @@ var Profile = /*#__PURE__*/function (_React$Component) {
     }
   }, {
     key: "unfollow",
-    value: function unfollow(user_id) {
+    value: function unfollow() {
       var self = this;
       axios.post('/api/unfollow/', {
         followed_id: this.state.current_user.id,
@@ -10070,13 +10087,13 @@ var Profile = /*#__PURE__*/function (_React$Component) {
                     })]
                   }), this.state.current_user.id == this.state.logged_user.id ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {}) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_19__.default.Group, {
                     children: this.isFollowed() ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_16__.default, {
-                      id: "follow",
-                      onClick: this.follow.bind(this),
-                      children: "Follow"
-                    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_16__.default, {
                       id: "unfollow",
                       onClick: this.unfollow.bind(this),
                       children: "UnFollow"
+                    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_16__.default, {
+                      id: "follow",
+                      onClick: this.follow.bind(this),
+                      children: "Follow"
                     })
                   })]
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_18__.default, {
@@ -10247,6 +10264,7 @@ var Register = /*#__PURE__*/function (_React$Component) {
           var cookies = new universal_cookie__WEBPACK_IMPORTED_MODULE_4__.default();
           cookies.set('token', response.data.token);
           cookies.set('logged_user', response.data.logged_user);
+          alert('Your activation link has sent to your email.Check your inbox.');
           self.setState({
             Redirect: true
           });

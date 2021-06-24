@@ -34,7 +34,7 @@ class PostController extends Controller
     function getAllPosts(Request $request){
 
         $user_id = JWTAuth::user()->id;
-        $followings = Follower::where('Follower',$user_id);
+        $followings = Follower::where('Follower',$user_id)->where('accepted',1);
         $ids = array();
 
         foreach ($followings as $following) {
