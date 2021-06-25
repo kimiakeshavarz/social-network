@@ -19,15 +19,19 @@ class FollowController extends Controller
     	$follower->follower = $follower_id;
     	$follower->followed = $following_id;
         $follower->accepted = 0;
-    	$follower->save();
+
+        $followers = Follower::where('followed',$following_id)->where('follower',$follower_id)->get();
+
+    	if(count($followers) <= 0)
+            $follower->save();
     }
 
     function unfollow(Request $request)
     {
         $follower_id = $request->follower_id;
-        $following_id = $request->followed_id;
+        $following_id = $request->following_id;
     	$follower = Follower::where('follower',$follower_id)->where('followed',$following_id)->get()[0];
-    	$follower->forceDelete();
+    	$follower->delete();
     }
 
     function getFollowers(Request $request)

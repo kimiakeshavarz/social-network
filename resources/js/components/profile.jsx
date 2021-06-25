@@ -15,7 +15,8 @@ class Profile extends React.Component{
         super(props);
 
         const cookies = new Cookies();
-        this.state = {posts:[1],followings:[],followers:[],options:[],current_user:[],logged_user:cookies.get('logged_user'),Redirect:false,likes:[],dislikes:[]};
+
+        this.state = {posts:[1],followings:false,followers:false,options:[],current_user:[],logged_user:cookies.get('logged_user'),Redirect:false,likes:[],dislikes:[]};
 
 
 
@@ -46,8 +47,7 @@ class Profile extends React.Component{
         	this.getAllUsers();
 	        this.getCurrentUser();
 	        this.getPosts();
-	        this.getFollowings();
-	        this.getFollowers();
+
         }
     }
 	getAllUsers(){
@@ -66,11 +66,11 @@ class Profile extends React.Component{
 	isFollowed(){
 		
 		for(let i =0;i<this.state.followers.length;i++)
-		{
-			if(this.state.followers[i].follower == this.state.logged_user.id)
-			{
+		{	
+
+				if(this.state.followers[i].id == this.logged_user.id)
 				return true;
-			}
+			
 		}
 		return false;
 	}
@@ -84,7 +84,8 @@ class Profile extends React.Component{
     	var self = this;
     	var url_parts = window.location.href.split('/');
     	var last_part = (url_parts[url_parts.length-1]);
-    	if(last_part == 'dashboard')
+
+    	if(last_part == 'dashboard' || window.location.pathname=='/dashboard/myposts')
     	{
         	axios.get("/api/getposts/").then(function(response){
                 self.setState({posts:response.data[0]});
@@ -110,10 +111,10 @@ class Profile extends React.Component{
         }
     }
 
-    getFollowings(){
+    getFollowings(user_id){
 
         var self = this;
-        axios.get("/api/getfollowings/"+this.state.logged_user.id).then(function(response){
+        axios.get("/api/getfollowings/"+user_id).then(function(response){
 
                 self.setState({followings:response.data});
  																																																																																											          ;
@@ -123,31 +124,37 @@ class Profile extends React.Component{
         });
     }
 
-    getFollowers(){
+    getFollowers(user_id){
 
         var self = this;
-        axios.get("/api/getfollowers/"+this.state.logged_user.id).then(function(response){
-                self.setState({followers:response.data});
+        axios.get("/api/getfollowers/"+user_id).then(function(response){
+                self.state.followers = response.data;
             }).catch(function(error){
 
-       			self.setState({Redirect:true})
+                self.setState({followers:response.data});
         });
     }
 
     getCurrentUser(){
 
     	var self = this;
-
+    	console.log(this.state.logged_user);
     	var url_parts = window.location.pathname.split('/');
         if(url_parts[url_parts.length-2] == 'profile')
         {
         	var username = (url_parts[url_parts.length-1]);
 
         	if(username == this.state.logged_user.username){
-        		window.location.href = '/dashboard';
+        		window.location.href = '/dashboard/myposts';
+        		return;
         	}
         	axios.get("/api/getuserinfo/"+username).then(function(response){
+                
                 self.setState({current_user:response.data});
+                self.getFollowers(response.data.id);
+               	self.getFollowings(response.data.id);
+
+
             }).catch(function(error){
 
        			self.setState({Redirect:true})
@@ -158,12 +165,16 @@ class Profile extends React.Component{
         {
             this.setState({current_user:this.state.logged_user});
 
+            this.getFollowers(this.state.logged_user.id);
+            this.getFollowings(this.state.logged_user.id);
+
         }
 
 
     }
 
     getFollowingUser(user_id){
+
         for(let i =0;i<this.state.followings.length;i++){
             if(this.state.followings[i].id == user_id)
             {
@@ -176,9 +187,9 @@ class Profile extends React.Component{
    	follow(){
 
    		var self = this;
-   		axios.post('/api/follow/',{followed_id:this.state.current_user.id,following_id:this.state.logged_user.id}).then(
+   		axios.post('/api/follow/',{following_id:this.state.current_user.id,follower_id:this.state.logged_user.id}).then(
    		function(response){
-   						self.setState({options:self.state.options});
+			self.getPosts();
 
    		}).catch(function(error){
 
@@ -192,9 +203,9 @@ class Profile extends React.Component{
 
 
 
-		axios.post('/api/unfollow/',{followed_id:this.state.current_user.id,following_id:this.state.logged_user.id}).then(
+		axios.post('/api/unfollow/',{following_id:this.state.current_user.id,follower_id:this.state.logged_user.id}).then(
    		function(response){
-			self.setState({options:self.state.options});
+			self.getPosts();
 
    		}).catch(function(error){
 
@@ -209,7 +220,7 @@ class Profile extends React.Component{
 
 		axios.post('/api/like',{post_id:post_id,user_id:this.state.logged_user.id}).then(
 		function(response){
-			self.setState({options:self.state.options});
+			self.getPosts();
 		}).catch(function(error){
 
        			self.setState({Redirect:true})
@@ -219,10 +230,10 @@ class Profile extends React.Component{
 	dislike(e){
 
 		var self = this; 
-		var post_id = e.target.id.split(' ')[1];
+		var post_id = e.target.id.split('_')[1];
 		axios.post('/api/dislike',{post_id:post_id,user_id:this.state.logged_user.id}).then(
 		function(response){
-			self.setState({options:self.state.options});
+			self.getPosts();
 		}).catch(function(error){
 
        			self.setState({Redirect:true})
@@ -231,41 +242,64 @@ class Profile extends React.Component{
 
 	isLiked(index){
 
-		for(let i=0;i<this.state.likes.length;i++){
+		if(this.state.likes[index] != undefined)
+		for(let i=0;i<this.state.likes[index].length;i++){
 			if(this.state.likes[index][i].user_id == this.state.logged_user.id)
-				return <small>You liked this post!</small>;
+				return <small>You have liked this post!</small>;
 		}
 
-		for(let i=0;i<this.state.dislikes.length;i++){
+		if(this.state.dislikes[index] != undefined)
+		for(let i=0;i<this.state.dislikes[index].length;i++){
+			console.log(this.state.likes[index][i]);
 			if(this.state.dislikes[index][i].user_id == this.state.logged_user.id)
-				return <small>You disliked this post!</small>;
+				return <small>You have disliked this post!</small>;
 		}
 		return false;
 	}
-	render(){
-		if(this.state.Redirect == true)
-		{
-			return <Redirect to='/login' />;
-		}   
+	canShowMyPosts(){
+		return (this.state.current_user.id == this.state.logged_user.id && window.location.pathname == '/dashboard/myposts');
+	}
+	render(){   
 
         var self = this;
         var current_user = this.state.current_user;
         var user_profile = this.state.current_user.profile;
 		 
-
+		if(this.state.Redirect == true)
+		{
+			alert('your Login has expired');
+			return <Redirect to='/login' />;
+		}
 		return(<Container fluid className='bg-secondary h-100 w-100 p-3 '>
         <Row>
-<Row className='w-100 d-flex justify-content-center '>
-			<Select onChange={this.goUserProfile.bind(this)} options={this.state.options} id='search-select' value="sv"   placeholder="Search user..." />
+<Row className='d-flex justify-content-center'>
+			<Select className='w-100' onChange={this.goUserProfile.bind(this)} options={this.state.options} id='search-select' value="sv"   placeholder="Search user..." />
         </Row>
 
-        <Row className='w-50 h-100 mt-2 '> 
-        {this.state.current_user.id == this.state.logged_user.id ? <MyPosts/> :this.state.posts.map(
+        <Row className='w-100 h-100 p-3'> 
+        <Col>
+        <Card className='bg-info'>
+        {this.state.logged_user.id == this.state.current_user.id?<Card.Header>
+        <Row className='w-50'>
+        	<Col>
+        		<Nav.Link href='/dashboard' ><small className='text-white'>New Posts</small></Nav.Link>
+        	</Col>
+        	<Col>
+        		<Nav.Link href='/dashboard/myposts'><small className='text-white'>My Posts</small></Nav.Link>
+        	</Col>
+        </Row>
+        </Card.Header>:<div></div>}
+        <Card.Body >
+        {self.canShowMyPosts() ? <MyPosts/> :this.state.posts.map(
         function(post,index){
+
         	var likes = self.state.likes[index];
         	var dislikes = self.state.dislikes[index];
-
             var user = self.getFollowingUser(post.user_id);
+            console.log(self.isLiked(index));
+            if(current_user.id == post.user_id)
+    			user = self.state.current_user;
+
             var image = post.image;
 
             return <Card className=' mt-3 d-flex justify-contents-center'>
@@ -279,23 +313,21 @@ class Profile extends React.Component{
             </Row>
             </Col>
             </Row></Card.Header>
-            <Card.Body>
+            <Card.Body >
             <Image src={post.image}
              thumbnail />
-             <div className='mt-3'>
+             <div className='mt-5'>
              <p>{post.caption}</p>
              </div>                                                
              <Card.Footer>
                                     <Row>
-                                        <Col lg='10' >
+                                      <Col lg='8' className='mt-2'>{self.isLiked(index)}</Col>
+                                        <Col  >
                                         <Button className='btn-success' onClick={self.like.bind(self)} id={'like_'+post.id}>
                                             <FontAwesomeIcon  icon='thumbs-up'  size="lg"/>
-                                            </Button>
-                                        </Col>
-
-                                        <Col >
-                                        <Button className='btn-danger' onClick={self.dislike.bind(self)} id={'dislike '+post.id}>
-                                            <FontAwesomeIcon  icon='thumbs-down'  size="lg"/>
+                                            </Button >
+                                            <Button id={'dislike_'+post.id}  onClick={self.dislike.bind(self)} className='m-1 btn-danger'>
+                  							<FontAwesomeIcon  icon='thumbs-down'  size="lg"/>
                                             </Button>
                                         </Col>
                                     </Row>
@@ -304,46 +336,58 @@ class Profile extends React.Component{
             </Card>;
         }
         )}
-        </Row>
-                       <Card className='w-50 m-2'>
-            <Card.Body className='bg-light'>
-			  <Tabs defaultActiveKey="profile" id="uncontrolled-tab-example">
+        </Card.Body>
+        </Card>
+        </Col>
+        <Col md='5'>
+                       <Card className='bg-light h-100'>
+            <Card.Body >
+			  <Tabs defaultActiveKey="profile" id="uncontrolled-tab-example" >
 			  <Tab eventKey="profile" title="Profile">
-                <Form.Group className='mt-3 d-flex justify-content-center'>
+			  <Card className='mt-4 bg-muted'>
+			  <Card.Body>
+
+                <Card.Title>
+                			       <Form.Group className=' m-3 d-flex justify-content-center'>
                     <Image src={user_profile}  height='170' width='170' roundedCircle/>
-				</Form.Group>
-                <Form.Group className='mt-3 d-flex justify-content-center'>
-                    <h1>{current_user.firstname} {current_user.lastname}</h1>
+				</Form.Group><Form.Group className='mt-1 d-flex justify-content-center'>
+                    <h1 className='text-dark'>{current_user.firstname} {current_user.lastname}</h1>
                 </Form.Group>
                     <Form.Group className='mt-1 d-flex justify-content-center'>
-                    <h4>@{current_user.username}</h4>
-                    </Form.Group>
-                <Form.Group className='mt-5'>
-                    <h4>{current_user.bio}</h4>
+                    <h4 className='text-secondary'>@{current_user.username}</h4>
+                    </Form.Group></Card.Title>
+                <Form.Group className='mt-5 p-3'>
+                    <h4 className='text-dark'>{current_user.bio}</h4>
                 </Form.Group>
+                {this.state.current_user.id == this.state.logged_user.id?<div></div>:
+                <Form.Group>
+                	{!self.isFollowed()?<Button id='follow' onClick={this.follow.bind(this)}>Follow</Button>:<Button id='unfollow' onClick={this.unfollow.bind(this)}>UnFollow</Button>}
+                </Form.Group>}
+                </Card.Body>
 
-                <Row className='mt-5'>
-                <Col>
-                    <h4>{this.state.followers.length} Followers</h4>
+                <Card.Footer className='p-2'>
+                <Row >
+                <Col className='ms-5'>
+                    <h5 className='text-info'>{this.state.followers.length} Followers</h5>
                 </Col>
                 <Col>
-                    <h4>{this.state.followings.length} Followings</h4>
+                    <h5 className='text-info'>{this.state.followings.length} Followings</h5>
 
                 </Col>
                 </Row>
-                {this.state.current_user.id == this.state.logged_user.id?<div></div>:
-                <Form.Group>
-                	{this.isFollowed()?<Button id='unfollow' onClick={this.unfollow.bind(this)}>UnFollow</Button>:<Button id='follow' onClick={this.follow.bind(this)}>Follow</Button>}
-                </Form.Group>}
-
+                </Card.Footer>
+                </Card>
                 </Tab>
-              		<Tab eventKey="home" title="Requests">
+              		{this.state.logged_user.id==this.state.current_user.id?<Tab eventKey="home" title="Requests">
     					<Notifs />
-  					</Tab>
+  					</Tab>:<div></div>}
             	</Tabs>
             </Card.Body>
 
         </Card>
+        </Col>
+                </Row>	
+
       </Row></Container>);
 	}
 }

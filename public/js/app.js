@@ -9224,9 +9224,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 /* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Card.js");
 /* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Form.js");
-/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Button.js");
-/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Row.js");
-/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Col.js");
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Row.js");
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Col.js");
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Button.js");
 /* harmony import */ var universal_cookie__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! universal-cookie */ "./node_modules/universal-cookie/es6/index.js");
 /* harmony import */ var _fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @fortawesome/react-fontawesome */ "./node_modules/@fortawesome/react-fontawesome/index.es.js");
 /* harmony import */ var _fortawesome_fontawesome_free_solid__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @fortawesome/fontawesome-free-solid */ "./node_modules/@fortawesome/fontawesome-free-solid/index.es.js");
@@ -9278,7 +9278,8 @@ var Myposts = /*#__PURE__*/function (_React$Component) {
       logged_user: cookies.get('logged_user'),
       posts: [],
       likes: [],
-      unlikes: []
+      unlikes: [],
+      update_time: new Date()
     };
 
     _this.getMyPosts();
@@ -9295,10 +9296,10 @@ var Myposts = /*#__PURE__*/function (_React$Component) {
           posts: response.data[0]
         });
         self.setState({
-          likes: response.data[1][0]
+          likes: response.data[1]
         });
         self.setState({
-          unlikes: response.data[2][0]
+          unlikes: response.data[2]
         });
       });
     }
@@ -9311,27 +9312,30 @@ var Myposts = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "sendPost",
     value: function sendPost() {
-      var caption = $('#caption').val();
+      var caption = $('#caption');
       var image = this.state.file;
       var formData = new FormData();
-      formData.append('caption', caption);
+      formData.append('caption', caption.val());
       formData.append('image', image);
+      var self = this;
+      caption.val('');
       axios.post('/api/addpost', formData, {
         headers: {
           "Content-Type": "multipart/form-data"
         }
       }).then(function (response) {
-        if (response.data.toString() != 'false') {
-          var json = response.data.json;
-        }
+        self.getMyPosts();
       });
     }
   }, {
     key: "deletePost",
     value: function deletePost(post_id) {
+      var self = this;
       axios.post('/api/removepost/', {
         post_id: post_id
-      }).then(function (response) {});
+      }).then(function (response) {
+        self.getMyPosts();
+      });
     }
   }, {
     key: "onFileChanged",
@@ -9347,40 +9351,45 @@ var Myposts = /*#__PURE__*/function (_React$Component) {
       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_6__.default, {
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_6__.default.Body, {
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__.default.Group, {
-              className: "d-flex justify-content-center",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__.default.File, {
-                id: "uploadimage",
-                label: "upload post image",
-                onChange: this.onFileChanged.bind(this)
-              })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__.default.Control, {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__.default.Control, {
+              className: "mt-2",
               id: "caption",
               as: "textarea",
               rows: "4"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__.default.Group, {
-              className: "mt-2 d-flex justify-content-end",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_8__.default, {
-                onClick: this.sendPost.bind(this),
-                children: "Send Post"
-              })
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_8__.default, {
+              className: "mt-3 w-50",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_9__.default, {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
+                  "for": "uploadimage",
+                  className: "btn btn-warning",
+                  children: "Upload Image"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__.default.File, {
+                  id: "uploadimage",
+                  hidden: true,
+                  onChange: this.onFileChanged.bind(this)
+                })]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_9__.default, {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_10__.default, {
+                  className: "btn-info  ",
+                  onClick: this.sendPost.bind(this),
+                  children: "Send Post"
+                })
+              })]
             })]
           })
         }), self.state.posts.map(function (post, index) {
-          var _this2 = this;
-
           var likes = self.state.likes[index];
-          if (likes == undefined) likes = [0];
+          if (likes == undefined) likes = [];
           var unlikes = self.state.unlikes[index];
-          if (unlikes == undefined) unlikes = [0];
+          if (unlikes == undefined) unlikes = [];
           return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_6__.default, {
             className: "mt-3",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_6__.default.Header, {
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_8__.default, {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_10__.default, {
                 className: "btn-danger btn-close",
                 "aria-label": "Close",
                 onClick: function onClick() {
-                  return _this2.deletePost(post.id);
+                  return self.deletePost(post.id);
                 }
               })
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_6__.default.Body, {
@@ -9392,12 +9401,13 @@ var Myposts = /*#__PURE__*/function (_React$Component) {
                   width: "200"
                 })
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__.default.Group, {
+                className: "mt-5",
                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
                   children: post.caption
                 })
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_6__.default.Footer, {
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_9__.default, {
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_10__.default, {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_8__.default, {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_9__.default, {
                     md: "4",
                     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_2__.FontAwesomeIcon, {
                       icon: "thumbs-up",
@@ -9405,7 +9415,7 @@ var Myposts = /*#__PURE__*/function (_React$Component) {
                     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("small", {
                       children: [" ", likes.length]
                     })]
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_10__.default, {
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_9__.default, {
                     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_2__.FontAwesomeIcon, {
                       icon: "thumbs-down",
                       size: "lg"
@@ -9525,9 +9535,7 @@ var Notifs = /*#__PURE__*/function (_React$Component) {
         follower_id: follower_id,
         followed_id: followed_id
       }).then(function (response) {
-        self.setState({
-          requests: self.state.requests
-        });
+        self.getRequests();
       });
     }
   }, {
@@ -9538,9 +9546,7 @@ var Notifs = /*#__PURE__*/function (_React$Component) {
         follower_id: follower_id,
         followed_id: followed_id
       }).then(function (response) {
-        self.setState({
-          requests: self.state.requests
-        });
+        self.getRequests();
       });
     }
   }, {
@@ -9557,15 +9563,16 @@ var Notifs = /*#__PURE__*/function (_React$Component) {
         console.log(request);
         var user = self.getUserInfo(request.id);
         return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_4__.default, {
-          className: "bg-light",
+          className: "mt-4",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_4__.default.Body, {
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_5__.default, {
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_6__.default, {
+                md: "7",
                 children: [user.firstname, " ", user.lastname, " has requested to follow you."]
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_6__.default, {
                 md: "2",
                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__.default, {
-                  className: "primary",
+                  className: "primary btn-sm",
                   onClick: function onClick() {
                     return self.follow(user.id, self.state.logged_user.id);
                   },
@@ -9575,7 +9582,7 @@ var Notifs = /*#__PURE__*/function (_React$Component) {
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_6__.default, {
                 md: "2",
                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__.default, {
-                  className: "primary",
+                  className: "primary btn-sm",
                   onClick: function onClick() {
                     return self.unfollow(user.id, self.state.logged_user.id);
                   },
@@ -9612,10 +9619,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 /* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Container.js");
 /* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Row.js");
-/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Card.js");
-/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Col.js");
-/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Image.js");
-/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Nav.js");
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Col.js");
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Card.js");
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Nav.js");
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Image.js");
 /* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Button.js");
 /* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Tabs.js");
 /* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Tab.js");
@@ -9677,8 +9684,8 @@ var Profile = /*#__PURE__*/function (_React$Component) {
     var cookies = new universal_cookie__WEBPACK_IMPORTED_MODULE_7__.default();
     _this.state = {
       posts: [1],
-      followings: [],
-      followers: [],
+      followings: false,
+      followers: false,
       options: [],
       current_user: [],
       logged_user: cookies.get('logged_user'),
@@ -9713,8 +9720,6 @@ var Profile = /*#__PURE__*/function (_React$Component) {
         this.getAllUsers();
         this.getCurrentUser();
         this.getPosts();
-        this.getFollowings();
-        this.getFollowers();
       }
     }
   }, {
@@ -9735,9 +9740,7 @@ var Profile = /*#__PURE__*/function (_React$Component) {
     key: "isFollowed",
     value: function isFollowed() {
       for (var i = 0; i < this.state.followers.length; i++) {
-        if (this.state.followers[i].follower == this.state.logged_user.id) {
-          return true;
-        }
+        if (this.state.followers[i].id == this.logged_user.id) return true;
       }
 
       return false;
@@ -9754,7 +9757,7 @@ var Profile = /*#__PURE__*/function (_React$Component) {
       var url_parts = window.location.href.split('/');
       var last_part = url_parts[url_parts.length - 1];
 
-      if (last_part == 'dashboard') {
+      if (last_part == 'dashboard' || window.location.pathname == '/dashboard/myposts') {
         axios.get("/api/getposts/").then(function (response) {
           self.setState({
             posts: response.data[0]
@@ -9790,9 +9793,9 @@ var Profile = /*#__PURE__*/function (_React$Component) {
     }
   }, {
     key: "getFollowings",
-    value: function getFollowings() {
+    value: function getFollowings(user_id) {
       var self = this;
-      axios.get("/api/getfollowings/" + this.state.logged_user.id).then(function (response) {
+      axios.get("/api/getfollowings/" + user_id).then(function (response) {
         self.setState({
           followings: response.data
         });
@@ -9805,15 +9808,13 @@ var Profile = /*#__PURE__*/function (_React$Component) {
     }
   }, {
     key: "getFollowers",
-    value: function getFollowers() {
+    value: function getFollowers(user_id) {
       var self = this;
-      axios.get("/api/getfollowers/" + this.state.logged_user.id).then(function (response) {
-        self.setState({
-          followers: response.data
-        });
+      axios.get("/api/getfollowers/" + user_id).then(function (response) {
+        self.state.followers = response.data;
       })["catch"](function (error) {
         self.setState({
-          Redirect: true
+          followers: response.data
         });
       });
     }
@@ -9821,19 +9822,23 @@ var Profile = /*#__PURE__*/function (_React$Component) {
     key: "getCurrentUser",
     value: function getCurrentUser() {
       var self = this;
+      console.log(this.state.logged_user);
       var url_parts = window.location.pathname.split('/');
 
       if (url_parts[url_parts.length - 2] == 'profile') {
         var username = url_parts[url_parts.length - 1];
 
         if (username == this.state.logged_user.username) {
-          window.location.href = '/dashboard';
+          window.location.href = '/dashboard/myposts';
+          return;
         }
 
         axios.get("/api/getuserinfo/" + username).then(function (response) {
           self.setState({
             current_user: response.data
           });
+          self.getFollowers(response.data.id);
+          self.getFollowings(response.data.id);
         })["catch"](function (error) {
           self.setState({
             Redirect: true
@@ -9843,6 +9848,8 @@ var Profile = /*#__PURE__*/function (_React$Component) {
         this.setState({
           current_user: this.state.logged_user
         });
+        this.getFollowers(this.state.logged_user.id);
+        this.getFollowings(this.state.logged_user.id);
       }
     }
   }, {
@@ -9861,12 +9868,10 @@ var Profile = /*#__PURE__*/function (_React$Component) {
     value: function follow() {
       var self = this;
       axios.post('/api/follow/', {
-        followed_id: this.state.current_user.id,
-        following_id: this.state.logged_user.id
+        following_id: this.state.current_user.id,
+        follower_id: this.state.logged_user.id
       }).then(function (response) {
-        self.setState({
-          options: self.state.options
-        });
+        self.getPosts();
       })["catch"](function (error) {
         self.setState({
           Redirect: true
@@ -9878,12 +9883,10 @@ var Profile = /*#__PURE__*/function (_React$Component) {
     value: function unfollow() {
       var self = this;
       axios.post('/api/unfollow/', {
-        followed_id: this.state.current_user.id,
-        following_id: this.state.logged_user.id
+        following_id: this.state.current_user.id,
+        follower_id: this.state.logged_user.id
       }).then(function (response) {
-        self.setState({
-          options: self.state.options
-        });
+        self.getPosts();
       })["catch"](function (error) {
         self.setState({
           Redirect: true
@@ -9899,9 +9902,7 @@ var Profile = /*#__PURE__*/function (_React$Component) {
         post_id: post_id,
         user_id: this.state.logged_user.id
       }).then(function (response) {
-        self.setState({
-          options: self.state.options
-        });
+        self.getPosts();
       })["catch"](function (error) {
         self.setState({
           Redirect: true
@@ -9912,14 +9913,12 @@ var Profile = /*#__PURE__*/function (_React$Component) {
     key: "dislike",
     value: function dislike(e) {
       var self = this;
-      var post_id = e.target.id.split(' ')[1];
+      var post_id = e.target.id.split('_')[1];
       axios.post('/api/dislike', {
         post_id: post_id,
         user_id: this.state.logged_user.id
       }).then(function (response) {
-        self.setState({
-          options: self.state.options
-        });
+        self.getPosts();
       })["catch"](function (error) {
         self.setState({
           Redirect: true
@@ -9929,180 +9928,235 @@ var Profile = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "isLiked",
     value: function isLiked(index) {
-      for (var i = 0; i < this.state.likes.length; i++) {
+      if (this.state.likes[index] != undefined) for (var i = 0; i < this.state.likes[index].length; i++) {
         if (this.state.likes[index][i].user_id == this.state.logged_user.id) return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("small", {
-          children: "You liked this post!"
+          children: "You have liked this post!"
         });
       }
-
-      for (var _i = 0; _i < this.state.dislikes.length; _i++) {
+      if (this.state.dislikes[index] != undefined) for (var _i = 0; _i < this.state.dislikes[index].length; _i++) {
+        console.log(this.state.likes[index][_i]);
         if (this.state.dislikes[index][_i].user_id == this.state.logged_user.id) return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("small", {
-          children: "You disliked this post!"
+          children: "You have disliked this post!"
         });
       }
-
       return false;
+    }
+  }, {
+    key: "canShowMyPosts",
+    value: function canShowMyPosts() {
+      return this.state.current_user.id == this.state.logged_user.id && window.location.pathname == '/dashboard/myposts';
     }
   }, {
     key: "render",
     value: function render() {
+      var self = this;
+      var current_user = this.state.current_user;
+      var user_profile = this.state.current_user.profile;
+
       if (this.state.Redirect == true) {
+        alert('your Login has expired');
         return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_8__.Redirect, {
           to: "/login"
         });
       }
 
-      var self = this;
-      var current_user = this.state.current_user;
-      var user_profile = this.state.current_user.profile;
       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_9__.default, {
         fluid: true,
         className: "bg-secondary h-100 w-100 p-3 ",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_10__.default, {
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_10__.default, {
-            className: "w-100 d-flex justify-content-center ",
+            className: "d-flex justify-content-center",
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_select__WEBPACK_IMPORTED_MODULE_11__.default, {
+              className: "w-100",
               onChange: this.goUserProfile.bind(this),
               options: this.state.options,
               id: "search-select",
               value: "sv",
               placeholder: "Search user..."
             })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_10__.default, {
-            className: "w-50 h-100 mt-2 ",
-            children: this.state.current_user.id == this.state.logged_user.id ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_myposts_jsx__WEBPACK_IMPORTED_MODULE_2__.default, {}) : this.state.posts.map(function (post, index) {
-              var likes = self.state.likes[index];
-              var dislikes = self.state.dislikes[index];
-              var user = self.getFollowingUser(post.user_id);
-              var image = post.image;
-              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_12__.default, {
-                className: " mt-3 d-flex justify-contents-center",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_12__.default.Header, {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_10__.default, {
+            className: "w-100 h-100 p-3",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_12__.default, {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_13__.default, {
+                className: "bg-info",
+                children: [this.state.logged_user.id == this.state.current_user.id ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_13__.default.Header, {
                   children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_10__.default, {
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_13__.default, {
-                      md: "2",
-                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_14__.default, {
-                        src: image,
-                        width: "80",
-                        height: "80",
-                        roundedCircle: true
+                    className: "w-50",
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_12__.default, {
+                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_14__.default.Link, {
+                        href: "/dashboard",
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("small", {
+                          className: "text-white",
+                          children: "New Posts"
+                        })
                       })
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_13__.default, {
-                      className: "h-50",
-                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_10__.default, {
-                        className: "h-50",
-                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_15__.default.Link, {
-                          href: user.profile,
-                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("b", {
-                            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("h4", {
-                              className: "text-dark",
-                              children: [user.firstname, " ", user.lastname]
-                            })
-                          })
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_12__.default, {
+                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_14__.default.Link, {
+                        href: "/dashboard/myposts",
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("small", {
+                          className: "text-white",
+                          children: "My Posts"
                         })
                       })
                     })]
                   })
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_12__.default.Body, {
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_14__.default, {
-                    src: post.image,
-                    thumbnail: true
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-                    className: "mt-3",
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("p", {
-                      children: post.caption
-                    })
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_12__.default.Footer, {
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_10__.default, {
-                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_13__.default, {
-                        lg: "10",
-                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_16__.default, {
-                          className: "btn-success",
-                          onClick: self.like.bind(self),
-                          id: 'like_' + post.id,
-                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_4__.FontAwesomeIcon, {
-                            icon: "thumbs-up",
-                            size: "lg"
-                          })
+                }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_13__.default.Body, {
+                  children: self.canShowMyPosts() ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_myposts_jsx__WEBPACK_IMPORTED_MODULE_2__.default, {}) : this.state.posts.map(function (post, index) {
+                    var likes = self.state.likes[index];
+                    var dislikes = self.state.dislikes[index];
+                    var user = self.getFollowingUser(post.user_id);
+                    console.log(self.isLiked(index));
+                    if (current_user.id == post.user_id) user = self.state.current_user;
+                    var image = post.image;
+                    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_13__.default, {
+                      className: " mt-3 d-flex justify-contents-center",
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_13__.default.Header, {
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_10__.default, {
+                          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_12__.default, {
+                            md: "2",
+                            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_15__.default, {
+                              src: image,
+                              width: "80",
+                              height: "80",
+                              roundedCircle: true
+                            })
+                          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_12__.default, {
+                            className: "h-50",
+                            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_10__.default, {
+                              className: "h-50",
+                              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_14__.default.Link, {
+                                href: user.profile,
+                                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("b", {
+                                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("h4", {
+                                    className: "text-dark",
+                                    children: [user.firstname, " ", user.lastname]
+                                  })
+                                })
+                              })
+                            })
+                          })]
                         })
-                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_13__.default, {
-                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_16__.default, {
-                          className: "btn-danger",
-                          onClick: self.dislike.bind(self),
-                          id: 'dislike ' + post.id,
-                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_4__.FontAwesomeIcon, {
-                            icon: "thumbs-down",
-                            size: "lg"
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_13__.default.Body, {
+                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_15__.default, {
+                          src: post.image,
+                          thumbnail: true
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+                          className: "mt-5",
+                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("p", {
+                            children: post.caption
                           })
-                        })
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_13__.default.Footer, {
+                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_10__.default, {
+                            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_12__.default, {
+                              lg: "8",
+                              className: "mt-2",
+                              children: self.isLiked(index)
+                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_12__.default, {
+                              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_16__.default, {
+                                className: "btn-success",
+                                onClick: self.like.bind(self),
+                                id: 'like_' + post.id,
+                                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_4__.FontAwesomeIcon, {
+                                  icon: "thumbs-up",
+                                  size: "lg"
+                                })
+                              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_16__.default, {
+                                id: 'dislike_' + post.id,
+                                onClick: self.dislike.bind(self),
+                                className: "m-1 btn-danger",
+                                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_4__.FontAwesomeIcon, {
+                                  icon: "thumbs-down",
+                                  size: "lg"
+                                })
+                              })]
+                            })]
+                          })
+                        })]
                       })]
-                    })
-                  })]
-                })]
-              });
-            })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_12__.default, {
-            className: "w-50 m-2",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_12__.default.Body, {
-              className: "bg-light",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_17__.default, {
-                defaultActiveKey: "profile",
-                id: "uncontrolled-tab-example",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_18__.default, {
-                  eventKey: "profile",
-                  title: "Profile",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_19__.default.Group, {
-                    className: "mt-3 d-flex justify-content-center",
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_14__.default, {
-                      src: user_profile,
-                      height: "170",
-                      width: "170",
-                      roundedCircle: true
-                    })
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_19__.default.Group, {
-                    className: "mt-3 d-flex justify-content-center",
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("h1", {
-                      children: [current_user.firstname, " ", current_user.lastname]
-                    })
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_19__.default.Group, {
-                    className: "mt-1 d-flex justify-content-center",
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("h4", {
-                      children: ["@", current_user.username]
-                    })
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_19__.default.Group, {
-                    className: "mt-5",
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("h4", {
-                      children: current_user.bio
-                    })
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_10__.default, {
-                    className: "mt-5",
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_13__.default, {
-                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("h4", {
-                        children: [this.state.followers.length, " Followers"]
-                      })
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_13__.default, {
-                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("h4", {
-                        children: [this.state.followings.length, " Followings"]
-                      })
-                    })]
-                  }), this.state.current_user.id == this.state.logged_user.id ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {}) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_19__.default.Group, {
-                    children: this.isFollowed() ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_16__.default, {
-                      id: "unfollow",
-                      onClick: this.unfollow.bind(this),
-                      children: "UnFollow"
-                    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_16__.default, {
-                      id: "follow",
-                      onClick: this.follow.bind(this),
-                      children: "Follow"
-                    })
-                  })]
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_18__.default, {
-                  eventKey: "home",
-                  title: "Requests",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_notifications_jsx__WEBPACK_IMPORTED_MODULE_3__.default, {})
+                    });
+                  })
                 })]
               })
-            })
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_12__.default, {
+              md: "5",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_13__.default, {
+                className: "bg-light h-100",
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_13__.default.Body, {
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_17__.default, {
+                    defaultActiveKey: "profile",
+                    id: "uncontrolled-tab-example",
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_18__.default, {
+                      eventKey: "profile",
+                      title: "Profile",
+                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_13__.default, {
+                        className: "mt-4 bg-muted",
+                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_13__.default.Body, {
+                          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_13__.default.Title, {
+                            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_19__.default.Group, {
+                              className: " m-3 d-flex justify-content-center",
+                              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_15__.default, {
+                                src: user_profile,
+                                height: "170",
+                                width: "170",
+                                roundedCircle: true
+                              })
+                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_19__.default.Group, {
+                              className: "mt-1 d-flex justify-content-center",
+                              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("h1", {
+                                className: "text-dark",
+                                children: [current_user.firstname, " ", current_user.lastname]
+                              })
+                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_19__.default.Group, {
+                              className: "mt-1 d-flex justify-content-center",
+                              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("h4", {
+                                className: "text-secondary",
+                                children: ["@", current_user.username]
+                              })
+                            })]
+                          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_19__.default.Group, {
+                            className: "mt-5 p-3",
+                            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("h4", {
+                              className: "text-dark",
+                              children: current_user.bio
+                            })
+                          }), this.state.current_user.id == this.state.logged_user.id ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {}) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_19__.default.Group, {
+                            children: !self.isFollowed() ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_16__.default, {
+                              id: "follow",
+                              onClick: this.follow.bind(this),
+                              children: "Follow"
+                            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_16__.default, {
+                              id: "unfollow",
+                              onClick: this.unfollow.bind(this),
+                              children: "UnFollow"
+                            })
+                          })]
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_13__.default.Footer, {
+                          className: "p-2",
+                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_10__.default, {
+                            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_12__.default, {
+                              className: "ms-5",
+                              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("h5", {
+                                className: "text-info",
+                                children: [this.state.followers.length, " Followers"]
+                              })
+                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_12__.default, {
+                              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("h5", {
+                                className: "text-info",
+                                children: [this.state.followings.length, " Followings"]
+                              })
+                            })]
+                          })
+                        })]
+                      })
+                    }), this.state.logged_user.id == this.state.current_user.id ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_18__.default, {
+                      eventKey: "home",
+                      title: "Requests",
+                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_notifications_jsx__WEBPACK_IMPORTED_MODULE_3__.default, {})
+                    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {})]
+                  })
+                })
+              })
+            })]
           })]
         })
       });

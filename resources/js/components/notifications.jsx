@@ -38,7 +38,7 @@ follow(follower_id,followed_id){
 	var self = this;
 	axios.post("/api/acceptfollow/",{follower_id:follower_id,followed_id:followed_id}).then(
 	function(response){
-				self.setState({requests:self.state.requests});
+				self.getRequests();
 	});
 }
 
@@ -47,7 +47,7 @@ unfollow(follower_id,followed_id){
 	var self = this;
 	axios.post("/api/unfollow/",{follower_id:follower_id,followed_id:followed_id}).then(
 	function(response){
-						self.setState({requests:self.state.requests});
+				self.getRequests();
 
 	});
 }
@@ -61,12 +61,12 @@ render()
 	return (self.state.requests.map(function(request){
 		console.log(request);
 		var user = self.getUserInfo(request.id); 
-		return(<Card className='bg-light'>
+		return(<Card className='mt-4'>
 		<Card.Body>
 		<Row>
-		<Col>{user.firstname} {user.lastname} has requested to follow you.</Col>
-		<Col md='2'><Button className='primary' onClick={()=>self.follow(user.id,self.state.logged_user.id)} roundedCircle>Accept</Button></Col>
-		<Col md='2'><Button className='primary' onClick={()=>self.unfollow(user.id,self.state.logged_user.id)} roundedCircle>Reject</Button></Col>
+		<Col md='7'>{user.firstname} {user.lastname} has requested to follow you.</Col>
+		<Col md='2'><Button className='primary btn-sm' onClick={()=>self.follow(user.id,self.state.logged_user.id)} roundedCircle>Accept</Button></Col>
+		<Col md='2'><Button className='primary btn-sm' onClick={()=>self.unfollow(user.id,self.state.logged_user.id)} roundedCircle>Reject</Button></Col>
 
 		</Row>
 		</Card.Body>

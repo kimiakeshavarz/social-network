@@ -75,7 +75,7 @@ class PostController extends Controller
         $user_id = JWTAuth::user()->id;
         $post_id = $request->post_id;
 
-        $result = Post::where('user_id',$user_id)->where('post_id',$post_id)->delete();
+        $result = Post::where('user_id',$user_id)->where('id',$post_id)->delete();
         
         return $result;
     }

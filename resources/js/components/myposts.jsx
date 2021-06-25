@@ -10,8 +10,9 @@ class Myposts extends React.Component{
         super(props);
 
         const cookies = new Cookies();
-        this.state = {logged_user:cookies.get('logged_user'),posts:[],likes:[],unlikes:[]};
+        this.state = {logged_user:cookies.get('logged_user'),posts:[],likes:[],unlikes:[],update_time:new Date()};
         this.getMyPosts();
+
     }
     getMyPosts(){
 
@@ -19,8 +20,8 @@ class Myposts extends React.Component{
         axios.get('/api/getposts/'+this.state.logged_user.username).then(
         function(response){
             self.setState({posts:response.data[0]});
-            self.setState({likes:response.data[1][0]});
-            self.setState({unlikes:response.data[2][0]});
+            self.setState({likes:response.data[1]});
+            self.setState({unlikes:response.data[2]});
 
 
         });
@@ -30,28 +31,31 @@ class Myposts extends React.Component{
         var self = this;
         axios.get('/api/getlikes/'+post_id).then(
         function(response){
-            
         });
     }
     sendPost(){
 
-    	var caption = $('#caption').val();
+    	var caption = $('#caption');
     	var image = this.state.file;
 
         const formData = new FormData();
-        formData.append('caption',caption);
+        formData.append('caption',caption.val());
         formData.append('image',image);
 
+        var self = this;
+        caption.val('');
     	axios.post('/api/addpost',formData,{headers:{"Content-Type": "multipart/form-data"}}).then(function(response){
-    		if(response.data.toString() != 'false'){
-    			var json = response.data.json;
-    		}
+                         self.getMyPosts();
+
     	});
     }
 
     deletePost(post_id){
+
+        var self = this;
         axios.post('/api/removepost/',{post_id:post_id}).then(
             function(response){
+                        self.getMyPosts();
 
             }
         );
@@ -69,35 +73,41 @@ class Myposts extends React.Component{
 		return(<div>
                     <Card>
                         <Card.Body>
-                            <Form.Group className='d-flex justify-content-center'>
-                            <Form.File id='uploadimage' label='upload post image' onChange={this.onFileChanged.bind(this)}/>
-                            </Form.Group>
-                            <Form.Control id='caption' as='textarea' rows='4'/>
-                            <Form.Group className='mt-2 d-flex justify-content-end'>
-                                <Button onClick={this.sendPost.bind(this)}>Send Post</Button>
-                            </Form.Group>
+
+                            <Form.Control className='mt-2' id='caption' as='textarea' rows='4'/>
+
+                            <Row className='mt-3 w-50'>
+                            <Col >
+                            <label for='uploadimage' className='btn btn-warning'>Upload Image</label>
+                            <Form.File id='uploadimage' hidden onChange={this.onFileChanged.bind(this)}/>
+                            </Col>
+                            <Col >
+                                <Button className='btn-info  ' onClick={this.sendPost.bind(this)}>Send Post</Button>
+                                </Col>
+                                </Row>
+                            
                         </Card.Body>
                     </Card>
                     {self.state.posts.map(
                         function(post,index){
                             var likes = self.state.likes[index];
                             if(likes == undefined)
-                                likes = [0];
+                                likes = [];
 
                             var unlikes = self.state.unlikes[index];
                             if(unlikes == undefined)
-                                unlikes = [0];
+                                unlikes = [];
 
                             return(
                             <Card className='mt-3'>
                                 <Card.Header>
-                                    <Button className="btn-danger btn-close" aria-label="Close" onClick={()=>this.deletePost(post.id)}></Button>
+                                    <Button className="btn-danger btn-close" aria-label="Close" onClick={()=>self.deletePost(post.id)}></Button>
                                 </Card.Header>
                                 <Card.Body>
                                     <Form.Group className='d-flex justify-content-center'>
                                         <img src={post.image} height='200' width='200'/>
                                     </Form.Group>
-                                    <Form.Group>
+                                    <Form.Group className='mt-5'>
                                         <p>{post.caption}</p>
                                     </Form.Group>
                                     <Card.Footer>
