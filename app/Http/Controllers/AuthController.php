@@ -57,9 +57,10 @@ class AuthController extends Controller
             $token = JWTAuth::fromUser($new_user);
             $link = $request->getHttpHost().'/accept/'.$new_user->id;
             $data = array('activation link :'=>$link);
-            Mail::send(['text'=>'mail'],$data,function($message){
-
-            });
+	        		Mail::raw($link, function ($message) use ($email){
+            		$message->to($email);
+              		$message->from('laravel@ssnetwork.ir');
+ 			});
     		return json_encode(array('logged_user'=>$new_user,'token'=>$token));
     	}
     	else
